@@ -1,0 +1,24 @@
+<ul class="sidebar-nav">{% load url_active %}{% load i18n %}
+    {% for label, section in menu.items %}
+        {% if not label == 'no_section' %}
+            <li class="sidebar-header">{% translate label.capitalize %}</li>
+            {% for item in section %}
+                <li class="sidebar-item{% url_active item.reverse_name %}">
+                    <a class="sidebar-link" href="{{ item.reverse_name }}">
+                        <i class="align-middle"{% if item.icon %} data-feather="{{ item.icon }}"{% endif %}></i>
+                        <span>{{ item.label }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+
+    {% for item in menu.no_section %}
+        <li class="sidebar-item{% url_active item.reverse_name %}">
+            <a class="sidebar-link" href="{{ item.reverse_name }}">
+                <i class="align-middle"{% if item.icon %} data-feather="{{ item.icon }}"{% endif %}></i>
+                <span>{{ item.label }}</span>
+            </a>
+        </li>
+    {% endfor %}
+</ul>

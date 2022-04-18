@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  db:
+    build: ./conf/docker/db
+    env_file:
+      - .env
+    volumes:
+      - "./cache/db:/var/lib/postgresql/data"
+    ports:
+      - "55432:5432"
+
+  asterisk:
+    image: btmluiz/asterisk:18-lts
+    env_file:
+      - .env
+      - asterisk.env
+    volumes:
+      - './conf/asterisk:/etc/asterisk'
+    ports:
+      - "5060:5060/udp"
+      - "5061:5061/udp"
+      - "8088:8088"
+      - "8089:8089"
+      - "4569:4569/udp"
+    depends_on:
+      - db
+
+  prometeuspbx-migration:
+    build: .
+    env_file:
+      - .env
+      - prometeuspbx.env
+    volumes:
+      - './:/code'
+      - './prometeuspbx.yaml:/etc/prometeuspbx/prometeuspbx.yaml'
+    command: sh -c "python manage.py makemigrations && python manage.py migrate"
+    links:
+      - db
+    depends_on:
+      - db
+
+  prometeuspbx-api:
+    build: .
+    env_file:
+      - .env
+      - asterisk.env
+      - prometeuspbx.env
+    volumes:
+      - './:/code'
+      - './prometeuspbx.yaml:/etc/prometeuspbx/prometeuspbx.yaml'
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8080:8000"
+    links:
+      - db
+    depends_on:
+      - prometeuspbx-migration
+      - db
+
+volumes:
+  db: {}

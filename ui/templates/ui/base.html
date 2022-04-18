@@ -1,0 +1,17 @@
+<!DOCTYPE html>{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PrometeusPBX{% block title %}{% endblock %}</title>
+    <link href="{% static 'ui/vendor/adminkit/css/app.css' %}" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'ui/styles.css' %}"/>
+    {% block extra_styles %}
+    {% endblock %}
+</head>
+<body>
+{% block base_content %}
+{% endblock %}
+<script src="{% static 'ui/vendor/adminkit/js/app.js' %}"></script>
+</body>
+</html>

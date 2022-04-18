@@ -1,0 +1,45 @@
+{% extends 'ui/dashboard/index.html' %}{% load i18n %}
+{% block content %}
+    <main class="content">
+    <div class="container-fluid p-0">
+        <h1 class="h3 mb-3">{% translate 'Users' %}</h1>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title pb-0">
+                            <h5 class="card-title mb-0">{% translate 'Users' %}</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped w-100">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Active</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{% if user.active %}
+                                    <span class="badge bg-success">{% translate 'Active' %}</span>
+                                {% else %}
+                                    <span class="badge bg-danger">{% translate 'Inactive' %}</span>
+                                {% endif %}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </main>
+{% endblock %}
