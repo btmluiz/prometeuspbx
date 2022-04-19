@@ -3,6 +3,7 @@ import uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -17,4 +18,10 @@ class Model(models.Model):
 
 
 class User(AbstractUser, Model):
-    pass
+    def get_full_name(self):
+        full_name = super().get_full_name()
+
+        if full_name == "":
+            return self.get_username()
+        else:
+            return full_name

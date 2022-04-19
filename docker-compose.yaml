@@ -51,7 +51,7 @@ services:
       - './prometeuspbx.yaml:/etc/prometeuspbx/prometeuspbx.yaml'
     command: python manage.py runserver 0.0.0.0:8000
     ports:
-      - "8080:8000"
+      - "8081:8000"
     links:
       - db
     depends_on:

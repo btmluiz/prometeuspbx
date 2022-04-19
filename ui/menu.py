@@ -5,7 +5,7 @@ from ui.exception import UIError
 
 
 class MenuItem:
-    def __init__(self, label, reverse_name, icon=None, items=None):
+    def __init__(self, label, reverse_name, icon=None, items=None, has_sub_path=False):
         """
         :param label: str
         :param reverse_name: str
@@ -16,7 +16,9 @@ class MenuItem:
         self._reverse_name = reverse_name
         self.icon = icon
         self.items = items
+        self.has_sub_path = has_sub_path
 
+    @property
     def reverse_name(self):
         if self._reverse_name:
             return reverse("ui:%s" % self._reverse_name)

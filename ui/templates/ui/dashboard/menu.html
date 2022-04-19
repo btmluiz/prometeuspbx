@@ -3,7 +3,7 @@
         {% if not label == 'no_section' %}
             <li class="sidebar-header">{% translate label.capitalize %}</li>
             {% for item in section %}
-                <li class="sidebar-item{% url_active item.reverse_name %}">
+                <li class="sidebar-item{% url_active item %}">
                     <a class="sidebar-link" href="{{ item.reverse_name }}">
                         <i class="align-middle"{% if item.icon %} data-feather="{{ item.icon }}"{% endif %}></i>
                         <span>{{ item.label }}</span>
@@ -14,7 +14,7 @@
     {% endfor %}
 
     {% for item in menu.no_section %}
-        <li class="sidebar-item{% url_active item.reverse_name %}">
+        <li class="sidebar-item{% url_active item %}">
             <a class="sidebar-link" href="{{ item.reverse_name }}">
                 <i class="align-middle"{% if item.icon %} data-feather="{{ item.icon }}"{% endif %}></i>
                 <span>{{ item.label }}</span>

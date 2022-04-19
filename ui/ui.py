@@ -1,6 +1,7 @@
-from ui import views
-from ui.pages import UIPage
 from django.utils.translation import gettext_lazy as _
+
+from ui import views
+from ui.pages.base import UIPage
 
 
 class DashboardHomePage(UIPage):
@@ -19,6 +20,13 @@ class DashboardUsersPage(UIPage):
     menu_label = _("Users")
     menu_icon = "user"
     menu_section = "dashboard"
+    menu_has_sub_path = True
 
 
-ui_patterns = [DashboardHomePage, DashboardUsersPage]
+class DashboardEditUserPage(UIPage):
+    path = "users/<uuid:pk>/"
+    path_name = "dashboard-user-edit"
+    view = views.DashboardEditUserView.as_view()
+
+
+ui_patterns = [DashboardHomePage, DashboardUsersPage, DashboardEditUserPage]

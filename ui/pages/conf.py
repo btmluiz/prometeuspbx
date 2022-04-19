@@ -32,13 +32,13 @@ class UIPages:
                                     name=ui_page.path_name,
                                 )
                             )
-                            if ui_page.is_menu:
+                            if ui_page.is_menu():
                                 menu.register(
                                     ui_page.as_menu_item(), ui_page.menu_section
                                 )
                         elif isinstance(ui_page.__class__, UIPageGroup):
                             urls = urls + ui_page.get_urls()
-                            if ui_page.is_menu:
+                            if ui_page.is_menu():
                                 menu.register(ui_page.as_menu_item())
                         else:
                             raise UIError(

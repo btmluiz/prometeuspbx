@@ -13,10 +13,11 @@ class UIMenuMixin:
     menu_label = None
     menu_icon = None
     menu_section = None
+    menu_has_sub_path = False
 
-    @property
-    def is_menu(self):
-        return bool(self.menu_label)
+    @classonlymethod
+    def is_menu(cls):
+        return cls.menu_label is not None
 
     @classonlymethod
     def as_menu_item(cls):
@@ -44,7 +45,12 @@ class UIPage(UIMenuMixin):
 
     @classonlymethod
     def as_menu_item(cls):
-        return MenuItem(cls.menu_label, cls.path_name, cls.menu_icon)
+        return MenuItem(
+            cls.menu_label,
+            cls.path_name,
+            cls.menu_icon,
+            has_sub_path=cls.menu_has_sub_path,
+        )
 
 
 class UIPageGroup(UIMenuMixin):
@@ -103,4 +109,5 @@ class UIPageGroup(UIMenuMixin):
             None,
             cls.menu_icon,
             [item.as_menu_item() for item in cls.pages],
+            cls.menu_has_sub_path,
         )

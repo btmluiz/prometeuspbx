@@ -2,10 +2,10 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.views import LoginView as _LoginView
 from django.shortcuts import render
 from django.views import View
+from django.views.generic import UpdateView
 
 from core.models import User
 from ui import forms
-
 
 # Create your views here.
 from ui.menu import menu
@@ -37,6 +37,14 @@ class DashboardViewMixin(object):
         return render(request, template_name, context, content_type, status, using)
 
 
+class DashboardFormViewMixin(object):
+    def render_to_response(self, context, **response_kwargs):
+        if not context:
+            context = {}
+        context["menu"] = menu.items
+        return super().render_to_response(context, **response_kwargs)
+
+
 class DashboardHomeView(View, DashboardViewMixin):
     def get(self, request):
         return self.render(request, "ui/dashboard/pages/home.html")
@@ -48,3 +56,9 @@ class DashboardUsersView(View, DashboardViewMixin):
         return self.render(
             request, "ui/dashboard/pages/list_users.html", {"users": users}
         )
+
+
+class DashboardEditUserView(DashboardFormViewMixin, UpdateView):
+    model = User
+    fields = ["first_name", "last_name"]
+    template_name = "ui/forms/user/update.html"
