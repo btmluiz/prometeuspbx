@@ -29,4 +29,15 @@ class DashboardEditUserPage(UIPage):
     view = views.DashboardEditUserView.as_view()
 
 
-ui_patterns = [DashboardHomePage, DashboardUsersPage, DashboardEditUserPage]
+class DashboardSetPassword(UIPage):
+    path = "users/<uuid:pk>/set-password/"
+    path_name = "dashboard-user-set-password"
+    view = views.DashboardUserSetPassword.as_view()
+
+
+ui_patterns = [
+    DashboardHomePage,
+    DashboardUsersPage,
+    DashboardEditUserPage,
+    DashboardSetPassword,
+]

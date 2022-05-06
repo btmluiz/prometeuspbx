@@ -1,8 +1,12 @@
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.views import LoginView as _LoginView
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import UpdateView
+from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.edit import BaseFormView
 
 from core.models import User
 from ui import forms
@@ -60,5 +64,26 @@ class DashboardUsersView(View, DashboardViewMixin):
 
 class DashboardEditUserView(DashboardFormViewMixin, UpdateView):
     model = User
-    fields = ["first_name", "last_name"]
+    fields = ["first_name", "last_name", "email"]
     template_name = "ui/forms/user/update.html"
+
+
+class DashboardUserSetPassword(SingleObjectMixin, BaseFormView):
+    model = User
+    form_class = forms.SetPasswordForm
+    success_url = reverse_lazy("ui:dashboard-user-edit")
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect("ui:dashboard-user-edit")
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.get_object()
+        return kwargs
+
+    def get_success_url(self):
+        return reverse("ui:dashboard-user-edit", kwargs=self.get_object().pk)

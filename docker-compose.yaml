@@ -48,6 +48,7 @@ services:
       - prometeuspbx.env
     volumes:
       - './:/code'
+      - './conf/asterisk/:/etc/asterisk'
       - './prometeuspbx.yaml:/etc/prometeuspbx/prometeuspbx.yaml'
     command: python manage.py runserver 0.0.0.0:8000
     ports:

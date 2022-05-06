@@ -1,32 +1,38 @@
 {% extends 'ui/dashboard/pages/users.html' %}{% load i18n %}
 {% block user_content %}
-    <div class="card-body">
-        <table class="table table-striped w-100">
-            <thead>
-            <tr>
-                <th class="w-50">Username</th>
-                <th class="w-50">Email</th>
-                <th>Active</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for user in users %}
-                <tr>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{% if user.active %}
-                        <span class="badge bg-success">{% translate 'Active' %}</span>
-                    {% else %}
-                        <span class="badge bg-danger">{% translate 'Inactive' %}</span>
-                    {% endif %}</td>
-                    <td class="table-action">
-                        <a href="{% url 'ui:dashboard-user-edit' user.id %}"><i class="align-middle"
-                                                                                data-feather="edit-2"></i></a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-striped w-100">
+                        <thead>
+                        <tr>
+                            <th class="w-50">Username</th>
+                            <th class="w-50">Email</th>
+                            <th>Active</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{% if user.is_active %}
+                                    <span class="badge bg-success">{% translate 'Active' %}</span>
+                                {% else %}
+                                    <span class="badge bg-danger">{% translate 'Inactive' %}</span>
+                                {% endif %}</td>
+                                <td class="table-action">
+                                    <a href="{% url 'ui:dashboard-user-edit' user.id %}"><i class="align-middle"
+                                                                                            data-feather="edit-2"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

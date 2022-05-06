@@ -1,12 +1,6 @@
 {% extends 'ui/dashboard/index.html' %}{% load i18n %}
 {% block content %}
     <h1 class="h3 mb-3">{% translate 'Users' %}</h1>
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                {% block user_content %}
-                {% endblock %}
-            </div>
-        </div>
-    </div>
+    {% block user_content %}
+    {% endblock %}
 {% endblock %}
