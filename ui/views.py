@@ -2,11 +2,10 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.views import LoginView as _LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from django.views import View
-from django.views.generic import UpdateView
 from django.views.generic.detail import SingleObjectMixin
-from django.views.generic.edit import BaseFormView
+from django.views.generic.edit import CreateView
 
 from core.models import User
 from ui import forms
@@ -62,28 +61,72 @@ class DashboardUsersView(View, DashboardViewMixin):
         )
 
 
-class DashboardEditUserView(DashboardFormViewMixin, UpdateView):
+class DashboardEditUserView(SingleObjectMixin, View, DashboardViewMixin):
     model = User
     fields = ["first_name", "last_name", "email"]
     template_name = "ui/forms/user/update.html"
 
-
-class DashboardUserSetPassword(SingleObjectMixin, BaseFormView):
-    model = User
-    form_class = forms.SetPasswordForm
-    success_url = reverse_lazy("ui:dashboard-user-edit")
-
     def get(self, request, *args, **kwargs):
-        return HttpResponseRedirect("ui:dashboard-user-edit")
+        self.object = self.get_object()
+
+        return self.render(
+            request,
+            self.template_name,
+            {"object": self.object, **self.get_forms()},
+        )
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return super().post(request, *args, **kwargs)
+        form_type = request.POST.get("form_type", None)
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["user"] = self.get_object()
-        return kwargs
+        form_kwargs = {"instance": self.object, "data": request.POST}
+
+        if form_type == "set-password":
+            form = forms.SetPasswordForm(**form_kwargs)
+
+            print(form.errors)
+            if not form.is_valid():
+                return self.render(
+                    request,
+                    self.template_name,
+                    self.get_default_context(form_kwargs={"form_set_password": form}),
+                )
+        else:
+            form = forms.UserEditForm(**form_kwargs)
+            if not form.is_valid():
+                print(form)
+                return self.render(
+                    request,
+                    self.template_name,
+                    self.get_default_context(form_kwargs={"form_update": form}),
+                )
+
+        self.peform_save(form)
+        return HttpResponseRedirect(self.get_success_url())
+
+    def peform_save(self, form):
+        return form.save()
+
+    def get_default_context(self, form_kwargs=None, **kwargs):
+        return {"object": self.object, **self.get_forms(**form_kwargs), **kwargs}
+
+    def get_forms(self, form_update=None, form_set_password=None):
+        if not form_update:
+            form_update = forms.UserEditForm(instance=self.object)
+
+        if not form_set_password:
+            form_set_password = forms.SetPasswordForm(instance=self.object)
+
+        return {
+            "form_update": form_update,
+            "form_set_password": form_set_password,
+        }
 
     def get_success_url(self):
-        return reverse("ui:dashboard-user-edit", kwargs=self.get_object().pk)
+        return reverse("ui:dashboard-user-edit", kwargs={"pk": self.get_object().pk})
+
+
+class DashboardCreateUser(DashboardFormViewMixin, CreateView):
+    model = User
+    form_class = forms.UserCreateForm
+    template_name = "ui/forms/user/create.html"

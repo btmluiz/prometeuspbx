@@ -1,17 +1,19 @@
 {% with id=widget.attrs.id %}
-    <div{% if id %} id="{{ id }}"{% endif %}{% if widget.attrs.class %} class="{{ widget.attrs.class }}"{% endif %}>
+    <div{% if id %} id="{{ id }}"{% endif %} class="{% if widget.attrs.class %}{{ widget.attrs.class }}{% else %}row{% endif %}">
         {% for group, options, index in widget.optgroups %}
             {% if group %}
-                <div class="row">
-                    <label class="form-label">{{ group }}</label>
-                    <div class="input-group mb-3">
+                <div class="col-12">
+                    <div class="row">
+                        <label class="form-label">{{ group }}</label>
+                        <div class="input-group mb-3">
             {% endif %}
             {% for option in options %}
-                        <div>
-                            {% include option.template_name with widget=option %}
-                        </div>
+                            <div class="col-sm-12 col-md-6">
+                                {% include option.template_name with widget=option %}
+                            </div>
             {% endfor %}
             {% if group %}
+                        </div>
                     </div>
                 </div>
             {% endif %}

@@ -23,21 +23,21 @@ class DashboardUsersPage(UIPage):
     menu_has_sub_path = True
 
 
+class DashboardCreateUserPage(UIPage):
+    path = "users/create/"
+    path_name = "dashboard-user-create"
+    view = views.DashboardCreateUser.as_view()
+
+
 class DashboardEditUserPage(UIPage):
     path = "users/<uuid:pk>/"
     path_name = "dashboard-user-edit"
     view = views.DashboardEditUserView.as_view()
 
 
-class DashboardSetPassword(UIPage):
-    path = "users/<uuid:pk>/set-password/"
-    path_name = "dashboard-user-set-password"
-    view = views.DashboardUserSetPassword.as_view()
-
-
 ui_patterns = [
     DashboardHomePage,
     DashboardUsersPage,
+    DashboardCreateUserPage,
     DashboardEditUserPage,
-    DashboardSetPassword,
 ]

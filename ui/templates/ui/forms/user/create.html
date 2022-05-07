@@ -1,0 +1,143 @@
+{% extends 'ui/dashboard/pages/users.html' %}{% load i18n %}
+{% block user_content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header pb-0">
+                    {% translate 'Create new user' %}
+                </div>
+                <form class="card-body" method="post" action="{% url 'ui:dashboard-user-create' %}">{% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-xl-3 mb-3">
+                            <label class="form-label"
+                                   for="{{ form.first_name.id_for_label }}">{% translate "First name" %}</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    <ul class="list-group">
+                                        {% for error in form.first_name.errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-xl-3 mb-3">
+                            <label class="form-label"
+                                   for="{{ form.last_name.id_for_label }}">{% translate "Last name" %}</label>
+                            {{ form.first_name }}
+                            {% if form.last_name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    <ul class="list-group">
+                                        {% for error in form.last_name.errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-xl-3 mb-3">
+                            <label class="form-label"
+                                   for="{{ form.username.id_for_label }}">{% translate "Username" %}</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="invalid-feedback d-block">
+                                    <ul class="list-group">
+                                        {% for error in form.username.errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-xl-3 mb-3">
+                            <label class="form-label"
+                                   for="{{ form.email.id_for_label }}">{% translate "Email" %}</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    <ul class="list-group">
+                                        {% for error in form.email.errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-12 mb-3">
+                            <label class="form-label"
+                                   for="{{ form.user_permissions.id_for_label }}">{% translate "Permissions" %}</label>
+                            {{ form.user_permissions }}
+                            {% if form.user_permissions.errors %}
+                                <div class="invalid-feedback d-block">
+                                    <ul class="list-group">
+                                        {% for error in form.user_permissions.errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>1
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-12 mb-3">
+                            <div class="form-check form-switch">
+                                {{ form.is_active }}
+                                <label class="form-check-label"
+                                       for="{{ form.is_active.id_for_label }}">{% translate 'Ativo' %}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 mb-3">
+                            <div class="form-check form-switch">
+                                {{ form.is_superuser }}
+                                <label class="form-check-label"
+                                       for="{{ form.is_superuser.id_for_label }}">{% translate 'Superuser' %}</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label class="form-label"
+                                   for="{{ form.password1.id_for_label }}">{% translate "Password" %}</label>
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}
+                                <div class="invalid-feedback d-block">
+                                    <ul class="list-group">
+                                        {% for error in form.password1.errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>1
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-12 col-md-6 mb-3">
+                            <label class="form-label"
+                                   for="{{ form.password2.id_for_label }}">{% translate "Password confirmation" %}</label>
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}
+                                <div class="invalid-feedback d-block">
+                                    <ul class="list-group">
+                                        {% for error in form.password2.errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>1
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary">{% translate 'Create' %}</button>
+                            </div>
+                        </div>
+                    </div>
+                    {#                    {% for field in form %}#}
+                    {#                        <div class="row">#}
+                    {#                            <div class="col-12 mb-3">#}
+                    {#                                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>#}
+                    {#                                {{ field }}#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                    {% endfor %}#}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
