@@ -1,0 +1,66 @@
+{% extends 'ui/dashboard/users/users.html' %}{% load i18n %}
+{% block user_content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="card-actions float-end">
+                        <div class="dropdown position-relative">
+                            <a href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
+                               class="text-black">
+                                <i data-feather="more-horizontal"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item"
+                                   href="{% url 'ui:dashboard-user-create' %}">{% translate 'New user' %}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="card-title">{% translate 'Users' %}</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped w-100">
+                        <thead>
+                        <tr>
+                            <th class="w-50">Username</th>
+                            <th class="w-50">Email</th>
+                            <th>Active</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in page_obj %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{% if user.is_active %}
+                                    <span class="badge bg-success">{% translate 'Active' %}</span>
+                                {% else %}
+                                    <span class="badge bg-danger">{% translate 'Inactive' %}</span>
+                                {% endif %}</td>
+                                <td>
+                                    <div class="table-action text-center">
+                                        <a href="{% url 'ui:dashboard-user-edit' user.id %}">
+                                            <i class="align-middle" data-feather="edit-2"></i>
+                                        </a>
+                                        <a href="{% url 'ui:dashboard-user-delete' user.id %}">
+                                            <i class="align-middle" data-feather="trash-2"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="row">
+        <div class="col">
+            {% include 'ui/utils/pagination.html' with page_obj=page_obj %}
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

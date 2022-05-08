@@ -26,13 +26,25 @@ class DashboardUsersPage(UIPage):
 class DashboardCreateUserPage(UIPage):
     path = "users/create/"
     path_name = "dashboard-user-create"
-    view = views.DashboardCreateUser.as_view()
+    view = views.DashboardCreateUserView.as_view()
 
 
 class DashboardEditUserPage(UIPage):
-    path = "users/<uuid:pk>/"
+    path = "users/<uuid:pk>/edit/"
     path_name = "dashboard-user-edit"
     view = views.DashboardEditUserView.as_view()
+
+
+class DashboardDeleteUserPage(UIPage):
+    path = "users/<uuid:pk>/delete/"
+    path_name = "dashboard-user-delete"
+    view = views.DashboardDeleteUserView.as_view()
+
+
+class DashboardSettingsPage(UIPage):
+    path = "settings/"
+    path_name = "dashboard-settings"
+    view = views.DashboardSettingsView.as_view()
 
 
 ui_patterns = [
@@ -40,4 +52,6 @@ ui_patterns = [
     DashboardUsersPage,
     DashboardCreateUserPage,
     DashboardEditUserPage,
+    DashboardDeleteUserPage,
+    DashboardSettingsPage,
 ]

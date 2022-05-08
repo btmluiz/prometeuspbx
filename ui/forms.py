@@ -81,10 +81,21 @@ class UserEditForm(forms.ModelForm):
         fields = [
             "first_name",
             "last_name",
+            "username",
             "email",
             "user_permissions",
+            "is_active",
+            "is_superuser",
         ]
-        widgets = {"user_permissions": forms.CheckboxSelectMultiple()}
+        widgets = {
+            "user_permissions": forms.CheckboxSelectMultiple(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = getattr(self, "instance", None)
+        if instance and instance.pk:
+            self.fields["username"].widget.attrs["readonly"] = True
 
 
 class SetPasswordForm(forms.Form):
@@ -120,8 +131,34 @@ class SetPasswordForm(forms.Form):
 
     def save(self, commit=True):
         password = self.cleaned_data["new_password1"]
-        print(password)
         self.user.set_password(password)
         if commit:
             self.user.save()
         return self.user
+
+
+class ChangePasswordForm(SetPasswordForm):
+    error_messages = {
+        **SetPasswordForm.error_messages,
+        "password_incorrect": _(
+            "Your old password was entered incorrectly. Please enter it again."
+        ),
+    }
+
+    old_password = forms.CharField(
+        label=_("Old password"),
+        widget=forms.PasswordInput(attrs={"autocomplete": "password"}),
+        strip=False,
+    )
+
+    def clean_old_password(self):
+        """
+        Validate that the old_password field is correct.
+        """
+        old_password = self.cleaned_data["old_password"]
+        if not self.user.check_password(old_password):
+            raise forms.ValidationError(
+                self.error_messages["password_incorrect"],
+                code="password_incorrect",
+            )
+        return old_password

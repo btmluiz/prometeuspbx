@@ -1,4 +1,4 @@
-{% extends 'ui/base.html' %}
+{% extends 'ui/base.html' %}{% load i18n %}
 {% block title %} - Dashboard{% endblock %}
 {% block base_content %}
     <div class="wrapper">
@@ -100,30 +100,30 @@
                                     class="text-dark">{{ user.get_full_name }}</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="pages-profile.html">
+                                <a class="dropdown-item" href="#">
                                     <i class="align-middle me-1" data-feather="user"></i>
-                                    Profile
+                                    {% translate 'Profile' %}
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="align-middle me-1" data-feather="pie-chart"></i> Analytics
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="index.html">
-                                    <i class="align-middle me-1" data-feather="settings"></i> Settings &
-                                    Privacy
+                                <a class="dropdown-item" href="{% url 'ui:dashboard-settings' %}">
+                                    <i class="align-middle me-1"
+                                       data-feather="settings"></i> {% translate 'Settings & Privacy' %}
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="align-middle me-1" data-feather="help-circle"></i> Help Center
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Log out</a>
+                                <a class="dropdown-item" href="{% url 'ui:logout' %}">Log out</a>
                             </div>
                         </li>
                     </ul>
                 </div>
             </nav>
             <main class="content">
-                <div class="container-fluid p-0">
+                <div class="container-fluid h-100 p-0">
                     {% block content %}
                     {% endblock %}
                 </div>

@@ -1,78 +1,16 @@
-{% extends 'ui/dashboard/pages/users.html' %}{% load i18n %}
+{% extends 'ui/dashboard/users/users.html' %}{% load i18n %}
 {% block user_content %}
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header pb-0">
-                    <h5 class="card-title">{% translate 'Edit user' %}: {{ object.get_username }}</h5>
+                    <h5 class="card-title">{% translate 'Edit user: ' %}{{ object.get_username }}</h5>
+                    <h6 class="card-subtitle text-muted">
+                        {% translate 'Since: ' %}{{ object.date_joined|date:'d/m/y' }}</h6>
                 </div>
                 <form class="card-body" method="post"
                       action="{% url 'ui:dashboard-user-edit' object.pk %}">{% csrf_token %}
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6 col-xl-3 mb-3">
-                            <label class="form-label"
-                                   for="{{ form_update.first_name.id_for_label }}">{% translate "First name" %}</label>
-                            {{ form_update.first_name }}
-                            {% if form_set_password.first_name.errors %}
-                                <div class="invalid-feedback d-block">
-                                    <ul class="list-group">
-                                        {% for error in form_set_password.first_name.errors %}
-                                            <li>{{ error }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="col-sm-12 col-md-6 col-xl-3 mb-3">
-                            <label class="form-label"
-                                   for="{{ form_update.last_name.id_for_label }}">{% translate "Last name" %}</label>
-                            {{ form_update.last_name }}
-                            {% if form_set_password.last_name.errors %}
-                                <div class="invalid-feedback d-block">
-                                    <ul class="list-group">
-                                        {% for error in form_set_password.last_name.errors %}
-                                            <li>{{ error }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="col-sm-12 col-xl-6 mb-3">
-                            <label class="form-label"
-                                   for="{{ form_update.email.id_for_label }}">{% translate "Email" %}</label>
-                            {{ form_update.email }}
-                            {% if form_set_password.email.errors %}
-                                <div class="invalid-feedback d-block">
-                                    <ul class="list-group">
-                                        {% for error in form_set_password.email.errors %}
-                                            <li>{{ error }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="col-sm-12 mb-3">
-                            <label class="form-label"
-                                   for="{{ form_update.user_permissions.id_for_label }}">{% translate "Permissions" %}</label>
-                            {{ form_update.user_permissions }}
-                            {% if form_set_password.user_permissions.errors %}
-                                <div class="invalid-feedback d-block">
-                                    <ul class="list-group">
-                                        {% for error in form_set_password.user_permissions.errors %}
-                                            <li>{{ error }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-primary">{% translate 'Update' %}</button>
-                            </div>
-                        </div>
-                    </div>
+                    {% include 'ui/forms/user_edit.html' with form=form_update %}
                 </form>
             </div>
         </div>
