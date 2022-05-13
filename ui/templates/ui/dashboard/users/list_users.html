@@ -4,18 +4,20 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header pb-0">
-                    <div class="card-actions float-end">
-                        <div class="dropdown position-relative">
-                            <a href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
-                               class="text-black">
-                                <i data-feather="more-horizontal"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item"
-                                   href="{% url 'ui:dashboard-user-create' %}">{% translate 'New user' %}</a>
+                    {% if perms.can_create_users %}
+                        <div class="card-actions float-end">
+                            <div class="dropdown position-relative">
+                                <a href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
+                                   class="text-black">
+                                    <i data-feather="more-horizontal"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a class="dropdown-item"
+                                       href="{% url 'ui:dashboard-user-create' %}">{% translate 'New user' %}</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
                     <h5 class="card-title">{% translate 'Users' %}</h5>
                 </div>
                 <div class="card-body">
@@ -25,31 +27,45 @@
                             <th class="w-50">Username</th>
                             <th class="w-50">Email</th>
                             <th>Active</th>
-                            <th>Actions</th>
+                            {% if perms.can_edit_users or perms.can_delete_users %}
+                                <th>Actions</th>
+                            {% endif %}
                         </tr>
                         </thead>
                         <tbody>
-                        {% for user in page_obj %}
+                        {% if page_obj %}
+                            {% for user in page_obj %}
+                                <tr>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{% if user.is_active %}
+                                        <span class="badge bg-success">{% translate 'Active' %}</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">{% translate 'Inactive' %}</span>
+                                    {% endif %}</td>
+                                    {% if perms.can_edit_users or perms.can_delete_users %}
+                                        <td>
+                                            <div class="table-action text-center">
+                                                {% if perms.can_edit_users %}
+                                                    <a href="{% url 'ui:dashboard-user-edit' user.id %}">
+                                                        <i class="align-middle" data-feather="edit-2"></i>
+                                                    </a>
+                                                {% endif %}
+                                                {% if perms.can_delete_users %}
+                                                    <a href="{% url 'ui:dashboard-user-delete' user.id %}">
+                                                        <i class="align-middle" data-feather="trash-2"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        {% else %}
                             <tr>
-                                <td>{{ user.username }}</td>
-                                <td>{{ user.email }}</td>
-                                <td>{% if user.is_active %}
-                                    <span class="badge bg-success">{% translate 'Active' %}</span>
-                                {% else %}
-                                    <span class="badge bg-danger">{% translate 'Inactive' %}</span>
-                                {% endif %}</td>
-                                <td>
-                                    <div class="table-action text-center">
-                                        <a href="{% url 'ui:dashboard-user-edit' user.id %}">
-                                            <i class="align-middle" data-feather="edit-2"></i>
-                                        </a>
-                                        <a href="{% url 'ui:dashboard-user-delete' user.id %}">
-                                            <i class="align-middle" data-feather="trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
+                                <td class="text-center" colspan="3">{% translate 'No extension registered' %}</td>
                             </tr>
-                        {% endfor %}
+                        {% endif %}
                         </tbody>
                     </table>
                 </div>
@@ -57,10 +73,10 @@
         </div>
     </div>
     {% if page_obj.paginator.num_pages > 1 %}
-    <div class="row">
-        <div class="col">
-            {% include 'ui/utils/pagination.html' with page_obj=page_obj %}
+        <div class="row">
+            <div class="col">
+                {% include 'ui/utils/pagination.html' with page_obj=page_obj %}
+            </div>
         </div>
-    </div>
     {% endif %}
 {% endblock %}

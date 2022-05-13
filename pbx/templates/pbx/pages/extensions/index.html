@@ -1,0 +1,67 @@
+{% extends 'ui/dashboard/index.html' %}{% load i18n %}
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header pb-0">
+                    {% if perms.can_create_extension %}
+                        <div class="card-actions float-end">
+                            <div class="dropdown position-relative">
+                                <a href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false"
+                                   class="text-black">
+                                    <i data-feather="more-horizontal"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a class="dropdown-item"
+                                       href="{% url 'ui:pbx-extension-create' %}">{% translate 'New extension' %}</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <h5 class="card-title">{% translate 'Extensions' %}</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped w-100">
+                        <thead>
+                        <tr>
+                            <th class="w-25">{% translate 'Number' %}</th>
+                            <th class="w-50">{% translate 'Username' %}</th>
+                            <th class="w-25">{% translate 'User' %}</th>
+                            <th>{% translate 'Actions' %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if page_obj %}
+                            {% for extension in page_obj %}
+                                <tr>
+                                    <td>{{ extension.number }}</td>
+                                    <td>{{ extension.username }}</td>
+                                    <td>{{ extension.user }}</td>
+                                    <td>
+                                        <div class="table-action text-center">
+                                            <a href="{% url 'ui:pbx-extension-edit' extension.id %}">
+                                                <i class="align-middle" data-feather="edit-2"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td class="text-center" colspan="3">{% translate 'No extension registered' %}</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if page_obj.paginator.num_pages > 1 %}
+        <div class="row">
+            <div class="col">
+                {% include 'ui/utils/pagination.html' with page_obj=page_obj %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

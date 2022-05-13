@@ -1,0 +1,32 @@
+{% load i18n %}
+<div class="col-sm-12 col-md-6 mb-3">
+    <label class="form-label"
+           for="{{ form.number.id_for_label }}">{% translate 'Number' %} <span class="text-danger">*</span></label>
+    {{ form.number }}
+    {% include 'ui/utils/field_errors.html' with field=form.number %}
+</div>
+<div class="col-sm-12 col-md-6 mb-3">
+    <label class="form-label"
+           for="{{ form.username.id_for_label }}">{% translate 'Username' %} <span
+            class="text-danger">*</span></label>
+    {{ form.username }}
+    {% include 'ui/utils/field_errors.html' with field=form.username %}
+</div>
+<div class="col-sm-12 col-md-6 mb-3">
+    <label class="form-label"
+           for="{{ form.password.id_for_label }}">{% translate 'Password' %} <span
+            class="text-danger">*</span></label>
+    {{ form.password }}
+    {% include 'ui/utils/field_errors.html' with field=form.password %}
+</div>
+<div class="col-sm-12 col-md-6 mb-3">
+    <label class="form-label" for="{{ form.user.id_for_label }}">{% translate 'User' %}</label>
+    {{ form.user }}
+    {% include 'ui/utils/field_errors.html' with field=form.user %}
+</div>
+<div class="col-sm-12 mb-3">
+    <label class="form-label" for="{{ form.context.id_for_label }}">{% translate 'Context' %} <span
+            class="text-danger">*</span></label>
+    {{ form.context }}
+    {% include 'ui/utils/field_errors.html' with field=form.context %}
+</div>

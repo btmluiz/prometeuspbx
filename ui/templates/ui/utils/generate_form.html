@@ -1,0 +1,14 @@
+{% for field in form %}
+    <div class="col-12 mb-3">
+        {% if field.field.widget.input_type == "checkbox" %}
+            <div class="form-check">
+                {{ field }}
+                <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            </div>
+        {% else %}
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+        {% endif %}
+        {% include 'ui/utils/field_errors.html' with field=field %}
+    </div>
+{% endfor %}

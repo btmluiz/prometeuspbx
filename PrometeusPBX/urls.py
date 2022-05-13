@@ -13,9 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
+
+if "ui" in settings.PROMETEUSPBX_CONFIG["modules"]:
+    handler500 = "ui.views.handler500"
 
 urlpatterns = [
     path("", include("core.urls")),

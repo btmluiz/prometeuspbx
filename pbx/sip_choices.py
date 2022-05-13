@@ -2,13 +2,13 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class PjSipAuthTypeChoices(models.TextChoices):
+class SipAuthTypeChoices(models.TextChoices):
     USER_PASSWORD = "userpass", _("User Password")
     MD5 = "md5", _("md5")
     GOOGLE_OAUTH = "google_oauth", _("google_oauth")
 
 
-class PjSipCIDPrivacyChoices(models.TextChoices):
+class SipCIDPrivacyChoices(models.TextChoices):
     ALLOWED_NOT_SCREENED = "allowed_not_screened", _("allowed_not_screened")
     ALLOWED_PASSED_SCREENED = "allowed_passed_screened", _("allowed_passed_screened")
     ALLOWED_FAILED_SCREENED = "allowed_failed_screened", _("allowed_failed_screened")
@@ -18,13 +18,13 @@ class PjSipCIDPrivacyChoices(models.TextChoices):
     UNAVAILABLE = "unavailable", _("unavailable")
 
 
-class PjSipConnectedLineMethodChoices(models.TextChoices):
+class SipConnectedLineMethodChoices(models.TextChoices):
     INVITE = "invite", _("invite")
     RE_INVITE = "reinvite", _("reinvite")
     UPDATE = "update", _("update")
 
 
-class PjSipDirectMediaGlareMigrationChoices(models.TextChoices):
+class SipDirectMediaGlareMigrationChoices(models.TextChoices):
     NONE = "none", _("none")
     OUTGOING = "outgoing", _("outgoing")
     INCOMING = "incoming", _("incoming")

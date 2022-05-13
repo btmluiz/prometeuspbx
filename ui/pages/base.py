@@ -1,4 +1,5 @@
 import abc
+import inspect
 
 from django.urls import path
 from django.utils.decorators import classonlymethod
@@ -28,6 +29,7 @@ class UIPage(UIMenuMixin):
     path = None
     view = None
     path_name = None
+    permissions = []
 
     def __int__(self):
         for attr in UIPAGE_REQUIRED_ATTRS:
@@ -38,10 +40,10 @@ class UIPage(UIMenuMixin):
     def get_view(cls):
         from django.views import View
 
-        if callable(cls.view):
+        if inspect.isclass(cls.view) and issubclass(cls.view, View):
+            return cls.view.as_view(permissions=cls.permissions)
+        elif callable(cls.view):
             return cls.view
-        elif issubclass(cls.view, View):
-            return cls.view.as_view()
 
     @classonlymethod
     def as_menu_item(cls):

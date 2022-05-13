@@ -75,6 +75,17 @@ class UserCreateForm(forms.ModelForm):
         return user
 
 
+class AccountInfoForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            "first_name",
+            "last_name",
+            "username",
+            "email",
+        ]
+
+
 class UserEditForm(forms.ModelForm):
     class Meta:
         model = User

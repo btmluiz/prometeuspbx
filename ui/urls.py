@@ -5,7 +5,7 @@ from ui import views, pages
 namespace = "ui"
 
 urlpatterns = [
-    path("", views.LoginView.as_view(), name="login"),
+    path("", views.UiLoginView.as_view(), name="login"),
     path("dashboard/", include(pages.ui_patterns.urls)),
-    path("dashboard/logout/", views.DashboardLogoutView.as_view(), name="logout"),
+    path("dashboard/logout/", views.UiLogoutView.as_view(), name="logout"),
 ]

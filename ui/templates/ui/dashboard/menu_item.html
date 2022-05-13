@@ -1,0 +1,7 @@
+{% load url_active %}
+<li class="sidebar-item{% url_active item %}">
+    <a class="sidebar-link" href="{{ item.reverse_name }}">
+        <i class="align-middle"{% if item.icon %} data-feather="{{ item.icon }}"{% endif %}></i>
+        <span>{{ item.label }}</span>
+    </a>
+</li>

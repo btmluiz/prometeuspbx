@@ -56,34 +56,41 @@
             </div>
         {% endif %}
     </div>
-    <div class="col-sm-12 mb-3">
-        <label class="form-label"
-               for="{{ form.user_permissions.id_for_label }}">{% translate "Permissions" %}</label>
-        {{ form.user_permissions }}
-        {% if form.user_permissions.errors %}
-            <div class="invalid-feedback d-block">
-                <ul class="list-group">
-                    {% for error in form.user_permissions.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
+    {% if form.user_permissions %}
+        <div class="col-sm-12 mb-3">
+            <label class="form-label"
+                   for="{{ form.user_permissions.id_for_label }}">{% translate "Permissions" %}</label>
+            {{ form.user_permissions }}
+            {% if form.user_permissions.errors %}
+                <div class="invalid-feedback d-block">
+                    <ul class="list-group">
+                        {% for error in form.user_permissions.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% if form.can_inactivate_users %}
+        <div class="col-sm-12 mb-3">
+            <div class="form-check form-switch">
+                {{ form.is_active }}
+                <label class="form-check-label"
+                       for="{{ form.is_active.id_for_label }}">{% translate 'Ativo' %}</label>
             </div>
-        {% endif %}
-    </div>
-    <div class="col-sm-12 mb-3">
-        <div class="form-check form-switch">
-            {{ form.is_active }}
-            <label class="form-check-label"
-                   for="{{ form.is_active.id_for_label }}">{% translate 'Ativo' %}</label>
         </div>
-    </div>
-    <div class="col-sm-12 mb-3">
-        <div class="form-check form-switch">
-            {{ form.is_superuser }}
-            <label class="form-check-label"
-                   for="{{ form.is_superuser.id_for_label }}">{% translate 'Superuser' %}</label>
+    {% endif %}
+    {% if form.is_superuser %}
+        <div class="col-sm-12 mb-3">
+            <div class="form-check form-switch">
+                {{ form.is_superuser }}
+                <label class="form-check-label"
+                       for="{{ form.is_superuser.id_for_label }}">{% translate 'Superuser' %}</label>
+            </div>
         </div>
-    </div>
+    {% endif %}
 </div>
 <div class="row">
     <div class="col">

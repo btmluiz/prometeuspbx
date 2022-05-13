@@ -10,21 +10,23 @@
                 </div>
                 <form class="card-body" method="post"
                       action="{% url 'ui:dashboard-user-edit' object.pk %}">{% csrf_token %}
-                    {% include 'ui/forms/user_edit.html' with form=form_update %}
+                    {% include 'ui/forms/user_edit.html' with form=form %}
                 </form>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header pb-0">
-                    <h5 class="card-title">{% translate 'Change password' %}</h5>
-                </div>
-                <div class="card-body">
-                    {% include 'ui/forms/user/set_password.html' %}
+    {% if perms.can_change_users_password %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header pb-0">
+                        <h5 class="card-title">{% translate 'Change password' %}</h5>
+                    </div>
+                    <div class="card-body">
+                        {% include 'ui/forms/user/set_password.html' with form=form_set_password %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}

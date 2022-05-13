@@ -1,0 +1,81 @@
+{% load i18n %}
+<div class="row">
+    <div class="col-md-10">
+        <div class="row">
+            <div class="col-12">
+                <div class="card" id="aor">
+                    <div class="card-header pb-0">
+                        <h5 class="card-title">{% translate 'Aor' %}</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">{% csrf_token %}
+                            <div class="row">
+                                <div class="col-12">
+                                    {% include 'ui/utils/generate_form.html' with form=form %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-end">
+                                    <button class="btn btn-primary">{% translate 'Update' %}</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card" id="auth">
+                    <div class="card-header pb-0">
+                        <h5 class="card-title">{% translate 'Auth' %}</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">{% csrf_token %}
+                            <div class="row">
+                                <div class="col-12">
+                                    {% include 'ui/utils/generate_form.html' with form=form_auth %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-end">
+                                    <button class="btn btn-primary">{% translate 'Update' %}</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card" id="endpoint">
+                    <div class="card-header pb-0">
+                        <h5 class="card-title">{% translate 'Endpoint' %}</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">{% csrf_token %}
+                            <div class="row">
+                                <div class="col-12">
+                                    {% include 'ui/utils/generate_form.html' with form=form_endpoint %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-end">
+                                    <button class="btn btn-primary">{% translate 'Update' %}</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div >
+            <div class="list-group">
+                <a class="list-group-item list-group-item-action" href="#aor">{% translate 'Aor' %}</a>
+            </div>
+        </div>
+    </div>
+</div>

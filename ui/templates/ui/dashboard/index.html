@@ -1,4 +1,4 @@
-{% extends 'ui/base.html' %}{% load i18n %}
+{% extends 'ui/base.html' %}{% load i18n %}{% load static %}
 {% block title %} - Dashboard{% endblock %}
 {% block base_content %}
     <div class="wrapper">
@@ -89,25 +89,12 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#"
-                               data-bs-toggle="dropdown">
-                                <i class="align-middle" data-feather="settings"></i>
-                            </a>
-
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
                                data-bs-toggle="dropdown">
                                 <i class="avatar img-fluid rounded me-1" data-feather="user"></i> <span
                                     class="text-dark">{{ user.get_full_name }}</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="#">
-                                    <i class="align-middle me-1" data-feather="user"></i>
-                                    {% translate 'Profile' %}
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="align-middle me-1" data-feather="pie-chart"></i> Analytics
-                                </a>
-                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'ui:dashboard-settings' %}">
                                     <i class="align-middle me-1"
                                        data-feather="settings"></i> {% translate 'Settings & Privacy' %}
@@ -122,12 +109,36 @@
                     </ul>
                 </div>
             </nav>
-            <main class="content">
-                <div class="container-fluid h-100 p-0">
-                    {% block content %}
-                    {% endblock %}
+            <div class="w-100 h-100">
+                <div class="notifications-container position-relative" aria-live="polite" aria-atomic="true">
+                    {#                    <div class="toast-container position-absolute top-0 end-0 p-3">#}
+                    {#                        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">#}
+                    {#                            <div class="toast-header">#}
+                    {#                                <i data-feather="check-circle"></i>#}
+                    {#                                <strong class="me-auto">PrometeusPBX</strong>#}
+                    {#                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>#}
+                    {#                            </div>#}
+                    {#                            <div class="toast-body">#}
+                    {#                                Testando!#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
+                    <div id="notifications-root" class="toast-container position-absolute top-0 end-0 p-3">
+                        {% include 'ui/dashboard/messages.html' %}
+                    </div>
                 </div>
-            </main>
+                <main class="content">
+                    <div class="container-fluid h-100 p-0">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </main>
+            </div>
         </div>
     </div>
+{% endblock %}
+{% block base_scripts %}
+    {#    <script type="application/javascript" src="{% static 'ui/js/prometeuspbx.js' %}"></script>#}
+{#    <script type="application/javascript" src="http://localhost:8080/prometeuspbx.js"></script>#}
+    <script type="application/javascript" src="{% static 'ui/js/scripts.js' %}"></script>
 {% endblock %}

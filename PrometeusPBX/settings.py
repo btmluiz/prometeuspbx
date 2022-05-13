@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
 from PrometeusPBX.helpers import load_config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.forms",
     "core",
+    "channels",
 ]
 
 MIDDLEWARE = [
@@ -64,7 +67,7 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
+                "core.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
         },
@@ -141,7 +144,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# FreshPBX Settings
+# PrometeusPBX Settings
 
 AUTH_USER_MODEL = "core.User"
 
@@ -149,4 +152,24 @@ PROMETEUSPBX_CONFIG = load_config()
 
 INSTALLED_APPS = INSTALLED_APPS + PROMETEUSPBX_CONFIG["modules"]
 
-LOGIN_REDIRECT_URL = "dashboard/"
+
+if "ui" in PROMETEUSPBX_CONFIG["modules"]:
+    LOGIN_URL = reverse_lazy("ui:login")
+    LOGIN_REDIRECT_URL = reverse_lazy("ui:dashboard-home")
+
+# Channels Support
+ASGI_APPLICATION = "PrometeusPBX.asgi.application"
+
+PROMETEUSPBX_REDIS_HOST = os.environ.get("PROMETEUSPBX_REDIS_HOST", "127.0.0.1")
+PROMETEUSPBX_REDIS_PORT = os.environ.get("PROMETEUSPBX_REDIS_PORT", 6379)
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [
+                "redis://%s:%s" % (PROMETEUSPBX_REDIS_HOST, PROMETEUSPBX_REDIS_PORT)
+            ],
+        },
+    }
+}

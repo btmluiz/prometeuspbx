@@ -1,0 +1,22 @@
+{% extends 'ui/dashboard/index.html' %}{% load i18n %}
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">{% translate 'Create extension' %}</h5>
+                </div>
+                <form class="card-body" method="post" action="{% url 'ui:pbx-extension-create' %}">{% csrf_token %}
+                    <div class="row">
+                        {% include 'pbx/pages/extensions/forms/base_form.html' with form=form %}
+                    </div>
+                    <div class="row">
+                        <div class="col text-end">
+                            <button class="btn btn-primary">{% translate 'Create' %}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

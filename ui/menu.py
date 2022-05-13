@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.utils.functional import LazyObject
+from django.utils.translation import gettext_lazy as _
 
 from ui.exception import UIError
 
@@ -36,18 +37,21 @@ class MenuGroup:
         return True
 
 
-DEFAULT_MENU_SECTIONS = [
-    "dashboard",
-    "pbx",
-    "no_section",
-]
+DEFAULT_MENU_SECTIONS = {
+    "dashboard": {"label": _("Dashboard")},
+    "pbx": {"label": _("PBX")},
+    "settings": {"label": _("Settings")},
+    "no_section": {"label": ""},
+}
 
 
 class Menu:
     def __init__(self):
-        self._items = {section: [] for section in DEFAULT_MENU_SECTIONS}
+        self._items = {section: [] for section in DEFAULT_MENU_SECTIONS.keys()}
 
-    def register(self, item, section=None):
+    def register(self, item, section=None, permissions=None):
+        if permissions is None:
+            permissions = []
         if not isinstance(item, MenuItem):
             raise UIError("Item must be an instance of MenuItem")
 
@@ -57,15 +61,23 @@ class Menu:
         if not self._items.get(section):
             self._items[section] = []
 
-        self._items[section].append(item)
+        self._items[section].append({"permissions": permissions, "item": item})
 
-    @property
-    def items(self):
+    def items(self, user):
         _items = {}
 
         for key, value in self._items.items():
             if len(value) > 0:
-                _items[key] = value
+                menu_items = []
+
+                for item in value:
+                    if user.has_perms(item["permissions"]):
+                        menu_items.append(item["item"])
+
+                _items[key] = {
+                    "label": DEFAULT_MENU_SECTIONS[key]["label"],
+                    "items": menu_items,
+                }
 
         return _items
 

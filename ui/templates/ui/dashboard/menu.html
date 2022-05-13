@@ -1,24 +1,17 @@
-<ul class="sidebar-nav">{% load url_active %}{% load i18n %}
-    {% for label, section in menu.items %}
-        {% if not label == 'no_section' %}
-            <li class="sidebar-header">{% translate label.capitalize %}</li>
-            {% for item in section %}
-                <li class="sidebar-item{% url_active item %}">
-                    <a class="sidebar-link" href="{{ item.reverse_name }}">
-                        <i class="align-middle"{% if item.icon %} data-feather="{{ item.icon }}"{% endif %}></i>
-                        <span>{{ item.label }}</span>
-                    </a>
-                </li>
+<ul class="sidebar-nav">{% load i18n %}
+    {% for section_key, section in menu.items %}
+        {% if not section_key == 'no_section' %}
+            <li class="sidebar-header">{{ section.label }}</li>
+            {% for item in section.items %}
+                {% include 'ui/dashboard/menu_item.html' with item=item %}
             {% endfor %}
         {% endif %}
     {% endfor %}
 
-    {% for item in menu.no_section %}
-        <li class="sidebar-item{% url_active item %}">
-            <a class="sidebar-link" href="{{ item.reverse_name }}">
-                <i class="align-middle"{% if item.icon %} data-feather="{{ item.icon }}"{% endif %}></i>
-                <span>{{ item.label }}</span>
-            </a>
-        </li>
-    {% endfor %}
+    {% if menu.no_section %}
+        <li class="sidebar-header">{{ section.label }}</li>
+        {% for item in menu.no_section.items %}
+            {% include 'ui/dashboard/menu_item.html' with item=item %}
+        {% endfor %}
+    {% endif %}
 </ul>

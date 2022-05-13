@@ -1,12 +1,12 @@
 import uuid
 
-from django.db import models
+from django.db import models, transaction
 
-from pjsip.choices import (
-    PjSipAuthTypeChoices,
-    PjSipCIDPrivacyChoices,
-    PjSipConnectedLineMethodChoices,
-    PjSipDirectMediaGlareMigrationChoices,
+from pbx.sip_choices import (
+    SipAuthTypeChoices,
+    SipCIDPrivacyChoices,
+    SipConnectedLineMethodChoices,
+    SipDirectMediaGlareMigrationChoices,
     SHAChoices,
     DTLSSetupChoices,
     YesNoChoices,
@@ -19,36 +19,43 @@ from pjsip.choices import (
 # Create your models here.
 
 
-class PjSipManager(models.Manager):
-    def create_extension(self, username, password, context, allow=None):
+class SipManager(models.Manager):
+    @transaction.atomic
+    def create_extension(self, extension, username, password, context, allow=None):
         if not allow:
             allow = "ulaw,alaw"
 
-        pjsip_aor = PjSipAor(pjsip_id=username)
-        pjsip_auth = PjSipAuth(pjsip_id=username, username=username, password=password)
-        pjsip_endpoint = PjSipEndpoint(
-            pjsip_id=username,
-            aors=pjsip_aor,
-            auth=pjsip_auth,
+        sip_aor = SipAor(sip_id=username, extension=extension)
+        sip_auth = SipAuth(
+            sip_id=username, username=username, password=password, extension=extension
+        )
+        sip_endpoint = SipEndpoint(
+            sip_id=username,
+            aors=sip_aor,
+            auth=sip_auth,
             context=context,
             allow=allow,
+            extension=extension,
         )
 
-        pjsip_aor.save(using=self._db)
-        pjsip_auth.save(using=self._db)
-        pjsip_endpoint.save(using=self._db)
-        return pjsip_endpoint
+        sip_aor.save(using=self._db)
+        sip_auth.save(using=self._db)
+        sip_endpoint.save(using=self._db)
+        return sip_endpoint
 
 
-class ModelPjSip(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, db_column="pk")
-    pjsip_id = models.CharField(max_length=40, db_column="id", unique=True, blank=True)
+class ModelSip(models.Model):
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False, db_column="pk"
+    )
+    sip_id = models.CharField(max_length=40, db_column="id", unique=True, blank=True)
+    extension = models.ForeignKey("pbx.Extension", on_delete=models.CASCADE)
 
-    objects = PjSipManager()
+    objects = SipManager()
 
     @property
-    def pjsip_pk(self):
-        return self.pjsip_id
+    def sip_pk(self):
+        return self.sip_id
 
     def __str__(self):
         return str(self.id)
@@ -57,7 +64,7 @@ class ModelPjSip(models.Model):
         abstract = True
 
 
-class PjSipAor(ModelPjSip):
+class SipAor(ModelSip):
     contact = models.CharField(max_length=255, blank=True, null=True)
     default_expiration = models.IntegerField(blank=True, null=True, default=120)
     mailboxes = models.CharField(max_length=80, blank=True, null=True)
@@ -73,9 +80,9 @@ class PjSipAor(ModelPjSip):
     voicemail_extension = models.CharField(max_length=40, blank=True, null=True)
 
 
-class PjSipAuth(ModelPjSip):
+class SipAuth(ModelSip):
     auth_type = models.CharField(
-        max_length=255, blank=True, null=True, choices=PjSipAuthTypeChoices.choices
+        max_length=255, blank=True, null=True, choices=SipAuthTypeChoices.choices
     )
     nonce_lifetime = models.IntegerField(blank=True, null=True)
     md5_cred = models.CharField(max_length=40, blank=True, null=True)
@@ -87,11 +94,11 @@ class PjSipAuth(ModelPjSip):
     oauth_secret = models.CharField(max_length=255, blank=True, null=True)
 
     def save(self, **kwargs):
-        self.pjsip_id = self.username
+        self.sip_id = self.username
         return super().save(**kwargs)
 
 
-class PjSipEndpoint(ModelPjSip):
+class SipEndpoint(ModelSip):
     accept_multiple_sdp_answers = models.BooleanField(default=False)
     accountcode = models.CharField(max_length=80, blank=True, null=True)
     acl = models.CharField(max_length=40, blank=True)
@@ -102,11 +109,11 @@ class PjSipEndpoint(ModelPjSip):
     allow_transfer = models.BooleanField(default=True)
     allow_unauthenticated_options = models.BooleanField(default=False)
     aors = models.ForeignKey(
-        PjSipAor, to_field="pjsip_id", on_delete=models.CASCADE, db_column="aors"
+        SipAor, to_field="sip_id", on_delete=models.CASCADE, db_column="aors"
     )
     asymmetric_rtp_codec = models.BooleanField(default=False)
     auth = models.ForeignKey(
-        PjSipAuth, to_field="pjsip_id", on_delete=models.CASCADE, db_column="auth"
+        SipAuth, to_field="sip_id", on_delete=models.CASCADE, db_column="auth"
     )
     bind_rtp_to_media_address = models.BooleanField(default=False)
     bundle = models.BooleanField(default=False)
@@ -114,8 +121,8 @@ class PjSipEndpoint(ModelPjSip):
     callerid = models.CharField(max_length=40, blank=True, null=True)
     callerid_privacy = models.CharField(
         max_length=40,
-        default=PjSipCIDPrivacyChoices.ALLOWED_NOT_SCREENED,
-        choices=PjSipCIDPrivacyChoices.choices,
+        default=SipCIDPrivacyChoices.ALLOWED_NOT_SCREENED,
+        choices=SipCIDPrivacyChoices.choices,
     )
     callerid_tag = models.CharField(max_length=40, blank=True, null=True)
     codec_prefs_incoming_answer = models.CharField(
@@ -128,8 +135,8 @@ class PjSipEndpoint(ModelPjSip):
     codec_prefs_outgoing_offer = models.CharField(max_length=128, blank=True, null=True)
     connected_line_method = models.CharField(
         max_length=40,
-        default=PjSipConnectedLineMethodChoices.INVITE,
-        choices=PjSipConnectedLineMethodChoices.choices,
+        default=SipConnectedLineMethodChoices.INVITE,
+        choices=SipConnectedLineMethodChoices.choices,
     )
     contact_acl = models.CharField(max_length=40, blank=True, null=True)
     contact_deny = models.CharField(max_length=95, blank=True, null=True)
@@ -143,13 +150,13 @@ class PjSipEndpoint(ModelPjSip):
     direct_media = models.BooleanField(default=False)
     direct_media_glare_mitigation = models.CharField(
         max_length=40,
-        default=PjSipDirectMediaGlareMigrationChoices.NONE,
-        choices=PjSipDirectMediaGlareMigrationChoices.choices,
+        default=SipDirectMediaGlareMigrationChoices.NONE,
+        choices=SipDirectMediaGlareMigrationChoices.choices,
     )
     direct_media_method = models.CharField(
         max_length=40,
-        default=PjSipConnectedLineMethodChoices.INVITE,
-        choices=PjSipDirectMediaGlareMigrationChoices.choices,
+        default=SipConnectedLineMethodChoices.INVITE,
+        choices=SipDirectMediaGlareMigrationChoices.choices,
     )
     disable_direct_media_on_nat = models.BooleanField(default=False)
     disallow = models.CharField(max_length=200, default="all")
@@ -273,5 +280,5 @@ class PjSipEndpoint(ModelPjSip):
     webrtc = models.BooleanField(default=False)
 
     def save(self, **kwargs):
-        self.pjsip_id = self.auth.pjsip_pk
+        self.sip_id = self.auth.sip_pk
         return super().save(**kwargs)

@@ -4,54 +4,61 @@ from ui import views
 from ui.pages.base import UIPage
 
 
-class DashboardHomePage(UIPage):
+class UiHomePage(UIPage):
     path = ""
     path_name = "dashboard-home"
-    view = views.DashboardHomeView.as_view()
+    view = views.UiHomeView
     menu_label = _("Home")
     menu_icon = "home"
     menu_section = "dashboard"
 
 
-class DashboardUsersPage(UIPage):
+class UiUsersPage(UIPage):
     path = "users"
     path_name = "dashboard-users"
-    view = views.DashboardUsersView.as_view()
+    view = views.UiUsersView
     menu_label = _("Users")
     menu_icon = "user"
     menu_section = "dashboard"
     menu_has_sub_path = True
+    permissions = ["can_list_users"]
 
 
-class DashboardCreateUserPage(UIPage):
+class UiCreateUserPage(UIPage):
     path = "users/create/"
     path_name = "dashboard-user-create"
-    view = views.DashboardCreateUserView.as_view()
+    view = views.UiCreateUserView
+    permissions = ["can_create_users"]
 
 
-class DashboardEditUserPage(UIPage):
+class UiEditUserPage(UIPage):
     path = "users/<uuid:pk>/edit/"
     path_name = "dashboard-user-edit"
-    view = views.DashboardEditUserView.as_view()
+    view = views.UiEditUserView
+    permissions = ["can_edit_users"]
 
 
-class DashboardDeleteUserPage(UIPage):
+class UiDeleteUserPage(UIPage):
     path = "users/<uuid:pk>/delete/"
     path_name = "dashboard-user-delete"
-    view = views.DashboardDeleteUserView.as_view()
+    view = views.UiDeleteUserView
+    permissions = ["can_delete_users"]
 
 
-class DashboardSettingsPage(UIPage):
+class UiSettingsPage(UIPage):
     path = "settings/"
     path_name = "dashboard-settings"
-    view = views.DashboardSettingsView.as_view()
+    view = views.UiSettingsView
+    menu_label = _("Settings")
+    menu_icon = "settings"
+    menu_has_sub_path = True
 
 
 ui_patterns = [
-    DashboardHomePage,
-    DashboardUsersPage,
-    DashboardCreateUserPage,
-    DashboardEditUserPage,
-    DashboardDeleteUserPage,
-    DashboardSettingsPage,
+    UiHomePage,
+    UiUsersPage,
+    UiCreateUserPage,
+    UiEditUserPage,
+    UiDeleteUserPage,
+    UiSettingsPage,
 ]
