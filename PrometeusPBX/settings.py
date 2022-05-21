@@ -157,6 +157,9 @@ if "ui" in PROMETEUSPBX_CONFIG["modules"]:
     LOGIN_URL = reverse_lazy("ui:login")
     LOGIN_REDIRECT_URL = reverse_lazy("ui:dashboard-home")
 
+if PROMETEUSPBX_CONFIG["routes"]:
+    DATABASE_ROUTERS = PROMETEUSPBX_CONFIG["routes"]
+
 # Channels Support
 ASGI_APPLICATION = "PrometeusPBX.asgi.application"
 

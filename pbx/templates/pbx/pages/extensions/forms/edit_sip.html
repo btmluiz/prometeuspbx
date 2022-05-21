@@ -1,6 +1,6 @@
 {% load i18n %}
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-10">
         <div class="row">
             <div class="col-12">
                 <div class="card" id="aor">
@@ -24,9 +24,9 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" id="auth">
             <div class="col-12">
-                <div class="card" id="auth">
+                <div class="card">
                     <div class="card-header pb-0">
                         <h5 class="card-title">{% translate 'Auth' %}</h5>
                     </div>
@@ -71,11 +71,21 @@
             </div>
         </div>
     </div>
-    <div class="col-md-2">
-        <div >
-            <div class="list-group">
-                <a class="list-group-item list-group-item-action" href="#aor">{% translate 'Aor' %}</a>
-            </div>
-        </div>
+    <div class="col-2 tab-helper-links">
+        <strong>{% translate 'Operations' %}</strong>
+        <hr>
+        <nav>
+            <ul class="list-unstyled" data-prometeus-list="smooth">
+                <li>
+                    <a href="#aor">{% translate 'Aor' %}</a>
+                </li>
+                <li>
+                    <a href="#auth">{% translate 'Auth' %}</a>
+                </li>
+                <li>
+                    <a href="#endpoint">{% translate 'Endpoint' %}</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>

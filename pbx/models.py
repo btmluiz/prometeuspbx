@@ -20,12 +20,12 @@ class Extension(Model):
     username = models.CharField(max_length=40)
     password = models.CharField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    context = models.ForeignKey(
-        Context,
-        on_delete=models.SET_NULL,
-        null=True,
-        default=Context.objects.filter(name="default").first(),
-    )
+    context = models.ForeignKey(Context, on_delete=models.SET_NULL, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.context:
+            self.context = Context.objects.filter(name="default").first()
+        super().save(*args, **kwargs)
 
 
 @receiver(models.signals.post_save, sender=Extension)

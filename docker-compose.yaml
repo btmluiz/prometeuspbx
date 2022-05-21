@@ -31,16 +31,19 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    links:
+      - db
 
   prometeuspbx-migration:
     build: .
     env_file:
       - .env
+      - asterisk.env
       - prometeuspbx.env
     volumes:
       - './:/code'
       - './prometeuspbx.yaml:/etc/prometeuspbx/prometeuspbx.yaml'
-    command: sh -c "python manage.py makemigrations && python manage.py migrate"
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py migrate --database asterisk"
     links:
       - db
     depends_on:
