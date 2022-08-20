@@ -21,7 +21,7 @@ jobs:
         with:
           push: true
           context: .
-          file: /docker/prometeuspbx_asterisk/Dockerfile
+          file: ./docker/prometeuspbx_asterisk/Dockerfile
           tags: |
             ghcr.io/${{ github.repository }}_asterisk:latest
             ghcr.io/${{ github.repository }}_asterisk:${{ github.sha}}
@@ -30,7 +30,7 @@ jobs:
         with:
           push: true
           context: .
-          file: /docker/prometeuspbx_asterisk/Dockerfile
+          file: ./docker/prometeuspbx_asterisk/Dockerfile
           tags: |
             ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ github.sha}}
