@@ -1,4 +1,4 @@
-name: Deploy to production
+name: Build images
 
 on:
   push:
@@ -20,8 +20,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: ./docker/prometeuspbx_asterisk
-          file: Dockerfile
+          context: .
+          file: /docker/prometeuspbx_asterisk/Dockerfile
           tags: |
             ghcr.io/${{ github.repository }}_asterisk:latest
             ghcr.io/${{ github.repository }}_asterisk:${{ github.sha}}
@@ -29,8 +29,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: ./docker/prometeuspbx
-          file: Dockerfile
+          context: .
+          file: /docker/prometeuspbx_asterisk/Dockerfile
           tags: |
             ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ github.sha}}
