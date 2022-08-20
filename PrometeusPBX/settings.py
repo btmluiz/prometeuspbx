@@ -180,8 +180,17 @@ if PROMETEUSPBX_CONFIG["storage"]:
             "object_parameters", None
         )
         GS_CUSTOM_ENDPOINT = PROMETEUSPBX_CONFIG["storage"].get("custom_endpoint", None)
+        GS_CUSTOM_ENDPOINT_PUBLIC = PROMETEUSPBX_CONFIG["storage"].get(
+            "custom_endpoint_public", None
+        )
+        GS_CUSTOM_ENDPOINT_PRIVATE = PROMETEUSPBX_CONFIG["storage"].get(
+            "custom_endpoint_private", None
+        )
         GS_LOCATION = PROMETEUSPBX_CONFIG["storage"].get("location", None)
         GS_LOCATION_PUBLIC = PROMETEUSPBX_CONFIG["storage"].get("location_public", None)
+        GS_LOCATION_PRIVATE = PROMETEUSPBX_CONFIG["storage"].get(
+            "location_private", None
+        )
         GS_EXPIRATION = PROMETEUSPBX_CONFIG["storage"].get("expiration", None)
 
 
