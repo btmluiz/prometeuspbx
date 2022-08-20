@@ -19,5 +19,7 @@ RUN pip install -r requirements.txt
 
 COPY ./ /app/
 
-ENTRYPOINT ["/bin/bash", "/code/docker-entrypoint.sh"]
+COPY ../../conf/docker/prometeuspbx/docker-entrypoint.sh /docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
 STOPSIGNAL SIGINT

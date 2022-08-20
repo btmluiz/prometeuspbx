@@ -10,6 +10,6 @@ do
   fi
 done
 
-python manage.py migrate --noinput
+python /app/manage.py migrate --noinput
 
 "$@"
