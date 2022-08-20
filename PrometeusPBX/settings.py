@@ -37,6 +37,11 @@ DEBUG = env("PROMETEUSPBX_DEBUG", default=0)
 
 ALLOWED_HOSTS = env("PROMETEUSPBX_ALLOWED_HOSTS", default="*").split(",")
 
+CSRF_TRUSTED_ORIGINS = (
+    env("PROMETEUSPBX_CSRF_TRUSTED_ORIGINS").split(",")
+    if env("PROMETEUSPBX_CSRF_TRUSTED_ORIGINS") != ""
+    else []
+)
 
 # Application definition
 
