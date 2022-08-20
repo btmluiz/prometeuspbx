@@ -1,12 +1,26 @@
 #!/bin/bash
 
-declare -a REQUIRED_ENVS=("PROMETEUSPBX_DATABASE_URL_FILE" "PROMETEUSPBX_SECRET_KEY_FILE" "PROMETEUSPBX_ALLOWED_HOSTS_FILE" "USE_X_FORWARDED_HOST_FILE" "ASTERISK_DATABASE_URL_FILE" "REDIS_URL_FILE")
+declare -a REQUIRED_ENVS=("PROMETEUSPBX_DATABASE_URL" "PROMETEUSPBX_SECRET_KEY" "PROMETEUSPBX_ALLOWED_HOSTS" "USE_X_FORWARDED_HOST" "ASTERISK_DATABASE_URL" "REDIS_URL")
+declare -a OPTIONAL_ENVS=("PROMETEUSPBX_ALLOWED_HOSTS" "PROMETEUSPBX_DEBUG")
+
+touch .env
 
 for env in "${REQUIRED_ENVS[@]}"
 do
   if [[ -z "${!env}" ]]; then
       printf "Container failed to start, pls pass -e %s=some-value\n" "$env"
       exit 1
+  else
+    echo "$env=${!env}" >> .env
+  fi
+done
+
+for env in "${OPTIONAL_ENVS[@]}"
+do
+  if [[ -z "${!env}" ]]; then
+      continue # skip if env is not set
+  else
+    echo "$env=${!env}" >> .env
   fi
 done
 
