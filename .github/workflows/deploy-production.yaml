@@ -20,7 +20,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: .
+          context: ./docker/prometeuspbx_asterisk
           file: ./docker/prometeuspbx_asterisk/Dockerfile
           tags: |
             ghcr.io/${{ github.repository }}_asterisk:latest
@@ -29,7 +29,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: .
+          context: ./docker/prometeuspbx_asterisk
           file: ./docker/prometeuspbx_asterisk/Dockerfile
           tags: |
             ghcr.io/${{ github.repository }}:latest
