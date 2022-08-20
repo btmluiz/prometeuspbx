@@ -17,7 +17,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build image Asterisk
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           push: true
           context: .
@@ -26,7 +26,7 @@ jobs:
             ghcr.io/${{ github.repository }}_asterisk:latest
             ghcr.io/${{ github.repository }}_asterisk:${{ github.sha}}
       - name: Build image PrometeusPBX
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           push: true
           context: .
