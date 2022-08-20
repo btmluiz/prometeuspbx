@@ -158,6 +158,33 @@ if "ui" in PROMETEUSPBX_CONFIG["modules"]:
 if PROMETEUSPBX_CONFIG["routes"]:
     DATABASE_ROUTERS = PROMETEUSPBX_CONFIG["routes"]
 
+# Configure storage backend
+if PROMETEUSPBX_CONFIG["storage"]:
+    PROMETEUSPBX_STORAGE_TYPE = PROMETEUSPBX_CONFIG["storage"].get("type", None)
+
+    if PROMETEUSPBX_STORAGE_TYPE == "gcp":
+        DEFAULT_FILE_STORAGE = "core.storages.PrivateGCPStorage"
+        STATICFILES_STORAGE = "core.storages.PublicGCPStorage"
+
+        GS_BUCKET_NAME = PROMETEUSPBX_CONFIG["storage"].get("bucket_name", None)
+        GS_PROJECT_ID = PROMETEUSPBX_CONFIG["storage"].get("project_id", None)
+        GS_CREDENTIALS = PROMETEUSPBX_CONFIG["storage"].get("credentials", None)
+        GS_DEFAULT_ACL = "publicRead"
+        GS_QUERYSTRING_AUTH = PROMETEUSPBX_CONFIG["storage"].get(
+            "querystring_auth", None
+        )
+        GS_FILE_OVERWRITE = PROMETEUSPBX_CONFIG["storage"].get("file_overwrite", None)
+        GS_MAX_MEMORY_SIZE = PROMETEUSPBX_CONFIG["storage"].get("max_memory_size", None)
+        GS_BLOB_CHUNK_SIZE = PROMETEUSPBX_CONFIG["storage"].get("blob_chunk_size", None)
+        GS_OBJECT_PARAMEETERS = PROMETEUSPBX_CONFIG["storage"].get(
+            "object_parameters", None
+        )
+        GS_CUSTOM_ENDPOINT = PROMETEUSPBX_CONFIG["storage"].get("custom_endpoint", None)
+        GS_LOCATION = PROMETEUSPBX_CONFIG["storage"].get("location", None)
+        GS_LOCATION_PUBLIC = PROMETEUSPBX_CONFIG["storage"].get("location_public", None)
+        GS_EXPIRATION = PROMETEUSPBX_CONFIG["storage"].get("expiration", None)
+
+
 # Channels Support
 ASGI_APPLICATION = "PrometeusPBX.asgi.application"
 
@@ -169,3 +196,5 @@ CHANNEL_LAYERS = {
         },
     }
 }
+
+USE_X_FORWARDED_HOST = bool(env("USE_X_FORWARDED_HOST", default=False))
