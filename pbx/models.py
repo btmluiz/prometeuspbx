@@ -1,11 +1,13 @@
 from django.apps import apps as global_apps
+from django.core.exceptions import ValidationError
 from django.db import models, DEFAULT_DB_ALIAS, router
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 
 from core.models import Model, User
+from pbx.models_sip import SipEndpoint
 
 # Create your models here.
-from pbx.models_sip import SipEndpoint
 
 
 class Context(Model):
@@ -15,11 +17,18 @@ class Context(Model):
         return self.name
 
 
+def validate_user_exists(value):
+    if not User.objects.filter(id=value).exists():
+        raise ValidationError(
+            _("User with id {} does not exist").format(value), code="invalid"
+        )
+
+
 class Extension(Model):
     number = models.CharField(max_length=10)
     username = models.CharField(max_length=40)
     password = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.UUIDField(null=True, blank=True, validators=[validate_user_exists])
     context = models.ForeignKey(Context, on_delete=models.SET_NULL, null=True)
 
     def save(self, *args, **kwargs):
@@ -61,3 +70,8 @@ def create_default_context(
 
     context = Context.objects.create(name="default")
     context.save()
+
+
+@receiver(models.signals.post_delete)
+def on_user_delete(sender, instance, *args, **kwargs):
+    Extension.objects.filter(user=instance.id).delete()

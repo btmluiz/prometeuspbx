@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-env = environ.Env(DEBUG=(bool, False))
+env = environ.Env(DEBUG=(bool, False), PROMETEUSPBX_CSRF_TRUSTED_ORIGINS=(str, ""))
 env_file = os.path.join(BASE_DIR, ".env")
 
 if os.path.isfile(env_file):
@@ -39,7 +39,7 @@ ALLOWED_HOSTS = env("PROMETEUSPBX_ALLOWED_HOSTS", default="*").split(",")
 
 CSRF_TRUSTED_ORIGINS = (
     env("PROMETEUSPBX_CSRF_TRUSTED_ORIGINS").split(",")
-    if env("PROMETEUSPBX_CSRF_TRUSTED_ORIGINS") != ""
+    if env("PROMETEUSPBX_CSRF_TRUSTED_ORIGINS", None) != ""
     else []
 )
 
@@ -155,11 +155,11 @@ if "ui" in PROMETEUSPBX_CONFIG["modules"]:
     LOGIN_URL = reverse_lazy("ui:login")
     LOGIN_REDIRECT_URL = reverse_lazy("ui:dashboard-home")
 
-if PROMETEUSPBX_CONFIG["routes"]:
+if hasattr(PROMETEUSPBX_CONFIG, "routes"):
     DATABASE_ROUTERS = PROMETEUSPBX_CONFIG["routes"]
 
 # Configure storage backend
-if PROMETEUSPBX_CONFIG["storage"]:
+if hasattr(PROMETEUSPBX_CONFIG, "storage"):
     PROMETEUSPBX_STORAGE_TYPE = PROMETEUSPBX_CONFIG["storage"].get("type", None)
 
     if PROMETEUSPBX_STORAGE_TYPE == "gcp":
