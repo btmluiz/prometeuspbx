@@ -159,7 +159,7 @@ if hasattr(PROMETEUSPBX_CONFIG, "routes"):
     DATABASE_ROUTERS = PROMETEUSPBX_CONFIG["routes"]
 
 # Configure storage backend
-if hasattr(PROMETEUSPBX_CONFIG, "storage"):
+if "storage" in PROMETEUSPBX_CONFIG.get("storage"):
     PROMETEUSPBX_STORAGE_TYPE = PROMETEUSPBX_CONFIG["storage"].get("type", None)
 
     if PROMETEUSPBX_STORAGE_TYPE == "gcp":
