@@ -11,8 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
-
-from django.urls import reverse_lazy
+import environ
 
 from PrometeusPBX.helpers import load_config
 
@@ -24,13 +23,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
+env = environ.Env(DEBUG=(bool, False))
+env_file = os.path.join(BASE_DIR, ".env")
+
+if os.path.isfile(env_file):
+    env.read_env(env_file)
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("PROMETEUSPBX_SECRET_KEY")
+SECRET_KEY = env("PROMETEUSPBX_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("PROMETEUSPBX_DEBUG", default=0)
+DEBUG = env("PROMETEUSPBX_DEBUG", default=0)
 
-ALLOWED_HOSTS = os.environ.get("PROMETEUSPBX_ALLOWED_HOSTS", default="*").split(",")
+ALLOWED_HOSTS = env("PROMETEUSPBX_ALLOWED_HOSTS", default="*").split(",")
 
 
 # Application definition
@@ -83,22 +88,8 @@ WSGI_APPLICATION = "PrometeusPBX.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": os.environ.get("PROMETEUSPBX_DATABASE_HOST", default="localhost"),
-        "NAME": os.environ.get("PROMETEUSPBX_DATABASE", default="prometeuspbx"),
-        "USER": os.environ.get("POSTGRES_USER", default="prometeuspbx"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", default="prometeuspbx"),
-        "PORT": os.environ.get("PROMETEUSPBX_DATABASE_PORT", default=55432),
-    },
-    "asterisk": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": os.environ.get("ASTERISK_DATABASE_HOST", default="localhost"),
-        "NAME": os.environ.get("ASTERISK_DATABASE", default="asterisk"),
-        "USER": os.environ.get("POSTGRES_USER", default="prometeuspbx"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", default="prometeuspbx"),
-        "PORT": os.environ.get("ASTERISK_DATABASE_PORT", default=55432),
-    },
+    "default": env.db("PROMETEUSPBX_DATABASE_URL"),
+    "asterisk": env.db("ASTERISK_DATABASE_URL"),
 }
 
 
@@ -154,6 +145,8 @@ INSTALLED_APPS = INSTALLED_APPS + PROMETEUSPBX_CONFIG["modules"]
 
 
 if "ui" in PROMETEUSPBX_CONFIG["modules"]:
+    from django.urls import reverse_lazy
+
     LOGIN_URL = reverse_lazy("ui:login")
     LOGIN_REDIRECT_URL = reverse_lazy("ui:dashboard-home")
 
@@ -163,16 +156,11 @@ if PROMETEUSPBX_CONFIG["routes"]:
 # Channels Support
 ASGI_APPLICATION = "PrometeusPBX.asgi.application"
 
-PROMETEUSPBX_REDIS_HOST = os.environ.get("PROMETEUSPBX_REDIS_HOST", "127.0.0.1")
-PROMETEUSPBX_REDIS_PORT = os.environ.get("PROMETEUSPBX_REDIS_PORT", 6379)
-
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [
-                "redis://%s:%s" % (PROMETEUSPBX_REDIS_HOST, PROMETEUSPBX_REDIS_PORT)
-            ],
+            "hosts": [env.cache("REDIS_URL")],
         },
     }
 }

@@ -1,0 +1,36 @@
+name: Deploy to production
+
+on:
+  push:
+    branches: [ master, main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Login to GHCR
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build image Asterisk
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./docker/prometeuspbx_asterisk
+          file: Dockerfile
+          tags: |
+            ghcr.io/${{ github.repository }}_asterisk:latest
+            ghcr.io/${{ github.repository }}_asterisk:${{ github.sha}}
+      - name: Build image PrometeusPBX
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./docker/prometeuspbx
+          file: Dockerfile
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ github.sha}}

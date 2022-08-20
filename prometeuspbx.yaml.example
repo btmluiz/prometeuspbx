@@ -1,0 +1,7 @@
+
+prometeuspbx:
+  modules:
+    - 'ui'
+    - 'pbx'
+  routes:
+    - 'pbx.db_routes.SipRoutes'
