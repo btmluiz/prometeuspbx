@@ -16,7 +16,11 @@ class BaseGCP(GoogleCloudStorage):
 class PublicGCPStorage(BaseGCP):
     def __init__(self, default_acl="publicRead", **settings):
         settings["default_acl"] = default_acl
-        settings["location"] = getattr(django_settings, "GS_LOCATION_PUBLIC", "public")
+        settings["location"] = (
+            "public"
+            if getattr(django_settings, "GS_LOCATION_PUBLIC", None) is None
+            else django_settings.GS_LOCATION_PUBLIC
+        )
         settings["custom_endpoint"] = getattr(
             django_settings, "GS_CUSTOM_ENDPOINT_PUBLIC", None
         )
@@ -27,8 +31,10 @@ class PublicGCPStorage(BaseGCP):
 class PrivateGCPStorage(BaseGCP):
     def __init__(self, default_acl="bucketOwnerFullControl", **settings):
         settings["default_acl"] = default_acl
-        settings["location"] = getattr(
-            django_settings, "GS_LOCATION_PRIVATE", "private"
+        settings["location"] = (
+            "private"
+            if getattr(django_settings, "GS_LOCATION_PRIVATE", None)
+            else django_settings.GS_LOCATION_PRIVATE
         )
         settings["custom_endpoint"] = getattr(
             django_settings, "GS_CUSTOM_ENDPOINT_PRIVATE", None
