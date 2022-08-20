@@ -15,10 +15,10 @@ class DbRouter:
 
     def allow_relation(self, obj1, obj2, **hints):
         if (
-            obj1.__name__ in self.get_models
+            obj1.__str__() in self.get_models
             or obj1._meta.app_label in self.get_app_labels
         ) or (
-            obj2.__name__ in self.get_models
+            obj2.__str__() in self.get_models
             or obj2._meta.app_label in self.get_app_labels
         ):
             return True
