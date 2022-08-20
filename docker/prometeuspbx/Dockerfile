@@ -23,3 +23,5 @@ COPY ../../conf/docker/prometeuspbx/docker-entrypoint.sh /docker-entrypoint.sh
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 STOPSIGNAL SIGINT
+
+CMD ["gunicorn", "--bind", ":8000", "PrometeusPBX.wsgi:application"]
