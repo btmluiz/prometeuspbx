@@ -1,6 +1,6 @@
 FROM btmluiz/asterisk:18-lts
 
-COPY ../conf/asterisk/ /etc/asterisk/
+COPY ../../conf/asterisk/ /etc/asterisk/
 
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 
