@@ -288,7 +288,7 @@ class SipContacts(ModelSip):
     uri = models.CharField(max_length=255, null=True, default=None)
     expiration_time = models.IntegerField(null=True, default=None)
     qualify_frequency = models.IntegerField(null=True, default=None)
-    outbound_proxy = models.CharField(max_length=40, null=True, default=None)
+    outbound_proxy = models.CharField(max_length=255, null=True, default=None)
     path = models.TextField()
     user_agent = models.CharField(max_length=255, null=True, default=None)
     qualify_timeout = models.FloatField(null=True, default=None)
@@ -296,10 +296,10 @@ class SipContacts(ModelSip):
     authenticate_qualify = models.SlugField(
         choices=YesNoChoices.choices, default=None, null=True
     )
-    via_addr = models.CharField(max_length=40, null=True, default=None)
+    via_addr = models.CharField(max_length=255, null=True, default=None)
     via_port = models.IntegerField(null=True, default=None)
     call_id = models.CharField(max_length=255, null=True, default=None)
-    endpoint = models.CharField(max_length=40, null=True, default=None)
+    endpoint = models.CharField(max_length=255, null=True, default=None)
     prune_on_boot = models.SlugField(
         choices=YesNoChoices.choices, default=None, null=True
     )
