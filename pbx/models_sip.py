@@ -284,7 +284,9 @@ class SipEndpoint(ModelSip):
         return super().save(**kwargs)
 
 
-class SipContact(ModelSip):
+class SipContact(models.Model):
+    id = models.AutoField(primary_key=True, db_column="pk")
+    sip_id = models.CharField(max_length=255, db_column="id", unique=True, blank=True)
     uri = models.CharField(max_length=255, null=True, default=None)
     expiration_time = models.IntegerField(null=True, default=None)
     qualify_frequency = models.IntegerField(null=True, default=None)
