@@ -14,7 +14,11 @@ class Migration(migrations.Migration):
             name="sipcontact",
             unique_together=set(),
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
+            model_name="sipcontact",
+            name="id",
+        ),
+        migrations.AddField(
             model_name="sipcontact",
             name="id",
             field=models.CharField(max_length=255, primary_key=True, serialize=False),
