@@ -48,7 +48,7 @@ class ModelSip(models.Model):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, db_column="pk"
     )
-    sip_id = models.CharField(max_length=40, db_column="id", unique=True, blank=True)
+    sip_id = models.CharField(max_length=255, db_column="id", unique=True, blank=True)
     extension = models.ForeignKey("pbx.Extension", on_delete=models.CASCADE)
 
     objects = SipManager()
@@ -284,7 +284,7 @@ class SipEndpoint(ModelSip):
         return super().save(**kwargs)
 
 
-class SipContacts(ModelSip):
+class SipContact(ModelSip):
     uri = models.CharField(max_length=255, null=True, default=None)
     expiration_time = models.IntegerField(null=True, default=None)
     qualify_frequency = models.IntegerField(null=True, default=None)
@@ -292,7 +292,7 @@ class SipContacts(ModelSip):
     path = models.TextField()
     user_agent = models.CharField(max_length=255, null=True, default=None)
     qualify_timeout = models.FloatField(null=True, default=None)
-    reg_server = models.CharField(max_length=20, null=True, default=None)
+    reg_server = models.CharField(max_length=255, null=True, default=None)
     authenticate_qualify = models.SlugField(
         choices=YesNoChoices.choices, default=None, null=True
     )
