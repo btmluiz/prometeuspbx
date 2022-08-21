@@ -1,25 +1,21 @@
 class DbRouter:
     db_name = None
-    models = []
     app_labels = []
 
     def db_for_read(self, model, **hints):
-        if model.__name__ in self.get_models:
-            return self.get_db_name(model.__name__)
+        if model._meta.app_label in self.get_app_labels:
+            return self.get_db_name(model._meta.app_label)
         return None
 
     def db_for_write(self, model, **hints):
-        if model.__name__ in self.get_models:
-            return self.get_db_name(model.__name__)
+        if model._meta.app_label in self.get_app_labels:
+            return self.get_db_name(model._meta.app_label)
         return None
 
     def allow_relation(self, obj1, obj2, **hints):
         if (
-            obj1.__str__() in self.get_models
-            or obj1._meta.app_label in self.get_app_labels
-        ) or (
-            obj2.__str__() in self.get_models
-            or obj2._meta.app_label in self.get_app_labels
+            obj1._meta.app_label in self.get_app_labels
+            and obj2._meta.app_label in self.get_app_labels
         ):
             return True
         return None
@@ -28,14 +24,10 @@ class DbRouter:
         if db != self.get_db_name(model_name):
             return True
 
-        if (model_name in self.get_models) or (app_label in self.get_app_labels):
+        if app_label in self.get_app_labels:
             return True
 
         return False
-
-    @property
-    def get_models(self):
-        return self.models
 
     @property
     def get_app_labels(self):
