@@ -155,7 +155,7 @@ if "ui" in PROMETEUSPBX_CONFIG["modules"]:
     LOGIN_URL = reverse_lazy("ui:login")
     LOGIN_REDIRECT_URL = reverse_lazy("ui:dashboard-home")
 
-if hasattr(PROMETEUSPBX_CONFIG, "routes"):
+if "routes" in PROMETEUSPBX_CONFIG:
     DATABASE_ROUTERS = PROMETEUSPBX_CONFIG["routes"]
 
 # Configure storage backend
