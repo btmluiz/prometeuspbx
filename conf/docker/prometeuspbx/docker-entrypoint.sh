@@ -25,5 +25,6 @@ do
 done
 
 python /app/manage.py migrate --noinput
+python /app/manage.py migrate --noinput --database=asterisk
 
 exec "$@"
