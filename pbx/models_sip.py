@@ -285,9 +285,7 @@ class SipEndpoint(ModelSip):
 
 
 class SipContact(models.Model):
-    sip_id = models.CharField(
-        max_length=255, db_column="id", blank=True, primary_key=True
-    )
+    id = models.CharField(max_length=255, primary_key=True)
     uri = models.CharField(max_length=255, null=True, default=None)
     expiration_time = models.IntegerField(null=True, default=None)
     qualify_frequency = models.IntegerField(null=True, default=None)
@@ -309,6 +307,6 @@ class SipContact(models.Model):
 
     class Meta:
         unique_together = (
-            "sip_id",
+            "id",
             "reg_server",
         )
