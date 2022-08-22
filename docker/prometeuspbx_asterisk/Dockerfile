@@ -7,4 +7,5 @@ COPY ../../conf/docker/prometeuspbx_asterisk/docker-entrypoint.sh /docker-entryp
 RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
+WORKDIR /etc/asterisk
 CMD ["asterisk", "-mqf"]
