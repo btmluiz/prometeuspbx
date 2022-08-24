@@ -21,13 +21,13 @@ class DbRouter:
         return None
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
-        if db != self.get_db_name(model_name):
-            return True
-
         if app_label in self.get_app_labels:
-            return True
+            if db != self.get_db_name(app_label):
+                return False
+        elif db == self.get_db_name(app_label):
+            return False
 
-        return False
+        return True
 
     @property
     def get_app_labels(self):

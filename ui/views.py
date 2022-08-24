@@ -205,7 +205,6 @@ class UiMultiFormView(UiTemplateView):
     def get_context_data(self, **kwargs):
         form_kwargs = kwargs.pop("form_kwargs", {})
         resp = {**self.get_forms(**form_kwargs), **super().get_context_data(**kwargs)}
-        print(resp)
         return resp
 
     def get_forms(self, **kwargs):

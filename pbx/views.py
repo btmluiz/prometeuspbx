@@ -31,7 +31,7 @@ class ExtensionCreateView(UiCreateView):
 class ExtensionEditView(UiSingleObjectMixin, UiMultiFormView):
     model = models.Extension
     forms_class = {
-        "sip": forms.SipAorForm,
+        "aor": forms.SipAorForm,
         "auth": forms.SipAuthForm,
         "endpoint": forms.SipEndpointForm,
     }
@@ -45,8 +45,22 @@ class ExtensionEditView(UiSingleObjectMixin, UiMultiFormView):
         if form_type == "form":
             return super().get_form_kwargs(form_type, kwargs)
         else:
-            instance = self.get_form_class(form_type)._meta.model(extension=self.object)
-            return {"instance": instance, **kwargs}
+            instance = self.get_form_class(form_type)._meta.model.objects.get(
+                extension=self.object
+            )
+            kwargs.update(
+                {
+                    "instance": instance,
+                }
+            )
+            return kwargs
+
+    def perform_save(self, form_type, form):
+        instance = form.save()
+        print(instance._meta)
+
+    def get_success_url(self):
+        return reverse("ui:pbx-extension-edit", kwargs={"pk": self.get_object().pk})
 
 
 class MonitorView(UiTemplateView):

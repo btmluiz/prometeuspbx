@@ -238,7 +238,7 @@ class SipEndpoint(ModelSip):
     rtp_engine = models.CharField(max_length=40, blank=True, null=True)
     rtp_ipv6 = models.BooleanField(default=False)
     rtp_keepalive = models.IntegerField(blank=True, default=0)
-    rtp_symmetric = models.BooleanField(default=False)
+    rtp_symmetric = models.BooleanField(default=True)
     rtp_timeout = models.IntegerField(blank=True, default=0)
     rtp_timeout_hold = models.IntegerField(blank=True, default=0)
     sdp_owner = models.CharField(max_length=40, blank=True, null=True)

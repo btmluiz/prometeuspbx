@@ -53,7 +53,7 @@ def create_default_context(
     app_config, using=DEFAULT_DB_ALIAS, apps=global_apps, *args, **kwargs
 ):
 
-    if not app_config.models_module:
+    if not app_config.models_module or using != "asterisk":
         return
 
     try:

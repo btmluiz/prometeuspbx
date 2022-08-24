@@ -8,11 +8,11 @@
                     <h5 class="card-title mb-0">{% translate 'Extensions settings' %}</h5>
                 </div>
                 <div class="list-group list-group-flush" role="tablist">
-                    <a class="list-group-item list-group-item-action{% if form_type == 'form22' %} active{% endif %}"
+                    <a class="list-group-item list-group-item-action{% if form_type == 'form' or not form_type %} active{% endif %}"
                        data-bs-toggle="list" href="#general" role="tab">
                         {% translate 'General' %}
                     </a>
-                    <a class="list-group-item list-group-item-action{% if form_type == 'form' or not form_type %} active{% endif %}"
+                    <a class="list-group-item list-group-item-action{% if form_type == 'form_sip' %} active{% endif %}"
                        data-bs-toggle="list" href="#sip" role="tab">
                         {% translate 'SIP' %}
                     </a>
@@ -21,7 +21,7 @@
         </div>
         <div class="col-md-9 col-xl-10">
             <div class="tab-content">
-                <div class="tab-pane fade show{% if form_type == 'form22' %} active{% endif %}"
+                <div class="tab-pane fade show{% if form_type == 'form' or not form_type %} active{% endif %}"
                      id="general" role="tabpanel">
                     <div class="card">
                         <div class="card-header pb-0">
@@ -34,9 +34,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade show{% if form_type == 'form' or not form_type %} active{% endif %}" id="sip"
+                <div class="tab-pane fade show{% if form_type == 'form_sip' %} active{% endif %}" id="sip"
                      role="tabpanel">
-                    {% include 'pbx/pages/extensions/forms/edit_sip.html' with form=form_sip %}
+                    {% include 'pbx/pages/extensions/forms/edit_sip.html' with form_aor=form_aor form_auth=form_auth form_endpoint=form_endpoint %}
                 </div>
             </div>
         </div>

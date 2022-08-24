@@ -9,9 +9,10 @@
                     </div>
                     <div class="card-body">
                         <form method="post">{% csrf_token %}
+                            <input type="hidden" name="form_type" value="aor">
                             <div class="row">
                                 <div class="col-12">
-                                    {% include 'ui/utils/generate_form.html' with form=form %}
+                                    {% include 'ui/utils/generate_form.html' with form=form_aor %}
                                 </div>
                             </div>
                             <div class="row">
@@ -32,6 +33,7 @@
                     </div>
                     <div class="card-body">
                         <form method="post">{% csrf_token %}
+                            <input type="hidden" name="form_type" value="auth">
                             <div class="row">
                                 <div class="col-12">
                                     {% include 'ui/utils/generate_form.html' with form=form_auth %}
@@ -55,6 +57,7 @@
                     </div>
                     <div class="card-body">
                         <form method="post">{% csrf_token %}
+                            <input type="hidden" name="form_type" value="endpoint">
                             <div class="row">
                                 <div class="col-12">
                                     {% include 'ui/utils/generate_form.html' with form=form_endpoint %}
