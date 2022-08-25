@@ -16,21 +16,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build image Asterisk
-        uses: docker/build-push-action@v3
-        with:
-          push: true
-          context: .
-          file: docker/prometeuspbx_asterisk/Dockerfile
-          tags: |
-            ghcr.io/${{ github.repository }}_asterisk:latest
-            ghcr.io/${{ github.repository }}_asterisk:${{ github.sha}}
       - name: Build image PrometeusPBX
         uses: docker/build-push-action@v3
         with:
           push: true
           context: .
-          file: docker/prometeuspbx/Dockerfile
           tags: |
             ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ github.sha}}
