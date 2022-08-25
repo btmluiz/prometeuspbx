@@ -2,7 +2,7 @@
 
 # Start PrometeusPBX GUI Dependecies
 
-declare -a REQUIRED_ENVS=("PROMETEUSPBX_DATABASE_URL" "PROMETEUSPBX_SECRET_KEY" "PROMETEUSPBX_ALLOWED_HOSTS" "USE_X_FORWARDED_HOST" "ASTERISK_DATABASE_URL" "REDIS_URL")
+declare -a REQUIRED_ENVS=("PROMETEUSPBX_DATABASE_URL" "PROMETEUSPBX_SECRET_KEY" "PROMETEUSPBX_ALLOWED_HOSTS" "USE_X_FORWARDED_HOST" "ASTERISK_DATABASE_URL" "REDIS_URL" "PROMETEUSPBX_PORT")
 declare -a OPTIONAL_ENVS=("PROMETEUSPBX_ALLOWED_HOSTS" "PROMETEUSPBX_DEBUG")
 
 touch .env
@@ -70,8 +70,8 @@ fi
 
 if [[ "$PROMETEUSPBX_DEBUG" ]]; then
     asterisk -fT &
-    python manage.py runserver 0.0.0.0:8000
+    python manage.py runserver 0.0.0.0:"${PROMETEUSPBX_PORT}"
 else
-    gunicorn --bind :8000 PrometeusPBX.wsgi:application --daemon --capture-output --log-file /var/log/prometeuspbx/access.log
+    gunicorn --bind :"${PROMETEUSPBX_PORT}" PrometeusPBX.wsgi:application --daemon --capture-output --log-file /var/log/prometeuspbx/access.log
     asterisk -fT
 fi

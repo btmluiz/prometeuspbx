@@ -146,6 +146,7 @@ ENV USE_X_FORWARDED_HOST=1
 ENV ASTERISK_DATABASE_URL=""
 ENV REDIS_URL=""
 ENV PROMETEUSPBX_CSRF_TRUSTED_ORIGINS=""
+ENV PROMETEUSPBX_PORT=8000
 
 RUN     apt-get update && \
         apt-get -y install debconf-utils && \
