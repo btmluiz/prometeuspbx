@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "prometeuspbx"
+version = "0.1.0"
+description = ""
+authors = ["Luiz Braga <contato@luizbraga.dev>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "^4.1"
+django-environ = "^0.9.0"
+django-storages = {extras = ["dropbox"], version = "^1.13.1"}
+channels = "^3.0.5"
+channels-redis = "^3.4.1"
+gunicorn = "^20.1.0"
+pre-commit = "^2.20.0"
+psycopg2 = "^2.9.3"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

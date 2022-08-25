@@ -5,7 +5,10 @@ from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 from core.models import Model, User
-from pbx.models_sip import SipEndpoint
+from pbx.models.sip import SipEndpoint
+
+
+# from pbx.models_sip import SipEndpoint
 
 # Create your models here.
 
@@ -15,6 +18,10 @@ class Context(Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def context_dialplan(self):
+        return f"{str(self.id)}"
 
 
 def validate_user_exists(value):
@@ -72,6 +79,11 @@ def create_default_context(
     context.save()
 
 
-@receiver(models.signals.post_delete)
+@receiver(models.signals.post_save, sender=Context)
+def on_create_context(sender, instance, *args, **kwargs):
+    pass
+
+
+@receiver(models.signals.post_delete, sender=User)
 def on_user_delete(sender, instance, *args, **kwargs):
     Extension.objects.filter(user=instance.id).delete()

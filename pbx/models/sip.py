@@ -22,15 +22,19 @@ from pbx.sip_choices import (
 class SipManager(models.Manager):
     @transaction.atomic
     def create_extension(self, extension, username, password, context, allow=None):
+        print(extension, username, password, context, allow)
         if not allow:
             allow = "ulaw,alaw"
 
-        sip_aor = SipAor(sip_id=username, extension=extension)
+        sip_aor = SipAor(sip_id=extension.id, extension=extension)
         sip_auth = SipAuth(
-            sip_id=username, username=username, password=password, extension=extension
+            sip_id=extension.id,
+            username=username,
+            password=password,
+            extension=extension,
         )
         sip_endpoint = SipEndpoint(
-            sip_id=username,
+            sip_id=extension.id,
             aors=sip_aor,
             auth=sip_auth,
             context=context,
@@ -48,7 +52,7 @@ class ModelSip(models.Model):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, db_column="pk"
     )
-    sip_id = models.CharField(max_length=255, db_column="id", unique=True, blank=True)
+    sip_id = models.UUIDField(db_column="id", unique=True, blank=True)
     extension = models.ForeignKey("pbx.Extension", on_delete=models.CASCADE)
 
     objects = SipManager()
@@ -94,7 +98,7 @@ class SipAuth(ModelSip):
     oauth_secret = models.CharField(max_length=255, blank=True, null=True)
 
     def save(self, **kwargs):
-        self.sip_id = self.username
+        self.sip_id = self.extension_id
         return super().save(**kwargs)
 
 

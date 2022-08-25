@@ -1,6 +1,7 @@
 from django import forms
 
-from pbx import models, models_sip
+from pbx import models
+from pbx.models import sip as models_sip
 
 
 class ExtensionEditForm(forms.ModelForm):

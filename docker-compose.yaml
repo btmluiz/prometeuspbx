@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  prometeuspbx-api:
+    image: test_prometeuspbx2:852f95383685d3efa0bcf1db8fdd86df53f5fa44
+#    build: ./prometeuspbx
+    env_file:
+      - ./.env
+      - asterisk.env
+      - prometeuspbx.env
+    volumes:
+      - './:/app'
+      - './prometeuspbx.yaml:/etc/prometeuspbx/prometeuspbx.yaml'
+      - './docker-entrypoint.sh:/docker-entrypoint.sh'
+    ports:
+      - "8081:8000"
+      - "5060:5060/udp"
+      - "5061:5061/udp"
+      - "8088:8088"
+      - "8089:8089"
+      - "4569:4569/udp"
+    depends_on:
+      redis:
+        condition: service_started
+  redis:
+    image: redis:7
+
+volumes:
+  db: {}
