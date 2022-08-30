@@ -52,7 +52,9 @@ class ModelSip(models.Model):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, db_column="pk"
     )
-    sip_id = models.CharField(max_length=255, unique=True, blank=True, null=True)
+    sip_id = models.CharField(
+        max_length=255, db_column="id", unique=True, blank=True, null=True
+    )
     extension = models.ForeignKey("pbx.Extension", on_delete=models.CASCADE)
 
     objects = SipManager()
