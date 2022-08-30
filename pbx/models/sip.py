@@ -26,15 +26,15 @@ class SipManager(models.Manager):
         if not allow:
             allow = "ulaw,alaw"
 
-        sip_aor = SipAor(sip_id=extension.id, extension=extension)
+        sip_aor = SipAor(sip_id=extension.username, extension=extension)
         sip_auth = SipAuth(
-            sip_id=extension.id,
+            sip_id=extension.username,
             username=username,
             password=password,
             extension=extension,
         )
         sip_endpoint = SipEndpoint(
-            sip_id=extension.id,
+            sip_id=extension.username,
             aors=sip_aor,
             auth=sip_auth,
             context=context,
@@ -52,7 +52,7 @@ class ModelSip(models.Model):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, db_column="pk"
     )
-    sip_id = models.UUIDField(db_column="id", unique=True, blank=True)
+    sip_id = models.CharField(max_length=255, unique=True, blank=True, null=True)
     extension = models.ForeignKey("pbx.Extension", on_delete=models.CASCADE)
 
     objects = SipManager()

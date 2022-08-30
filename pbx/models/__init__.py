@@ -33,7 +33,7 @@ def validate_user_exists(value):
 
 class Extension(Model):
     number = models.CharField(max_length=10)
-    username = models.CharField(max_length=40)
+    username = models.CharField(max_length=40, unique=True)
     password = models.CharField(max_length=255)
     user = models.UUIDField(null=True, blank=True, validators=[validate_user_exists])
     context = models.ForeignKey(Context, on_delete=models.SET_NULL, null=True)
